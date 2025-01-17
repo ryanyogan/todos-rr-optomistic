@@ -1,5 +1,6 @@
 import { data, Link, useFetcher } from "react-router";
 import invariant from "tiny-invariant";
+import { TodoList } from "~/components/todo-list";
 import { todos } from "~/lib/db.server";
 import type { Route } from "./+types/home";
 
@@ -25,6 +26,39 @@ export async function action(props: Route.ActionArgs) {
       invariant(description, "Description is required");
 
       await todos.create(description);
+      break;
+    }
+
+    case "TOGGLE_COMPLETION": {
+      const id = formData.get("id") as string;
+      const completed = formData.get("completed") as string;
+
+      await todos.update(id, {
+        completed: !JSON.parse(completed),
+        completedAt: !JSON.parse(completed) ? new Date() : undefined,
+      });
+      break;
+    }
+
+    case "EDIT_TASK": {
+      const id = formData.get("id") as string;
+
+      await todos.update(id, { editing: true });
+      break;
+    }
+
+    case "SAVE_TASK": {
+      const id = formData.get("id") as string;
+      const description = formData.get("description") as string;
+
+      await todos.update(id, { description, editing: false });
+      break;
+    }
+
+    case "DELETE_TASK": {
+      const id = formData.get("id") as string;
+
+      await todos.delete(id);
       break;
     }
 
@@ -77,9 +111,7 @@ export default function Home(props: Route.ComponentProps) {
         <div className="border border-gray-300 bg-white/90 px-4 py-2 dark:border-gray-700 dark:bg-gray-900">
           {data.tasks.length > 0 ? (
             <ul>
-              {data.tasks.map((task) => (
-                <li key={task.id}>{task.description}</li>
-              ))}
+              <TodoList todos={data.tasks} />
             </ul>
           ) : (
             <p className="text-center leading-7">No tasks available</p>
