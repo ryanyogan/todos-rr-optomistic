@@ -1,5 +1,6 @@
 import { data, Link, useFetcher } from "react-router";
 import invariant from "tiny-invariant";
+import { TodoActions } from "~/components/todo-actions";
 import { TodoList } from "~/components/todo-list";
 import { todos } from "~/lib/db.server";
 import type { Route } from "./+types/home";
@@ -62,6 +63,16 @@ export async function action(props: Route.ActionArgs) {
       break;
     }
 
+    case "CLEAR_COMPLETED": {
+      await todos.clearCompleted();
+      break;
+    }
+
+    case "DELTE_ALL": {
+      await todos.deleteAll();
+      break;
+    }
+
     default: {
       throw new Response(`Unknown Intent: ${intent}`, { status: 400 });
     }
@@ -119,20 +130,7 @@ export default function Home(props: Route.ComponentProps) {
         </div>
 
         <div className="border border-gray-300 bg-white/90 px-4 py-2 dark:border-gray-700 dark:bg-gray-900">
-          <div className="flex items-center justify-between gap-4 text-sm">
-            <p className="text-center leading-7">
-              {data.tasks.length} {data.tasks.length === 1 ? "item" : "items"}{" "}
-              left
-            </p>
-            <div className="flex items-center gap-4">
-              <button className="text-red-400 transition hover:text-red-600">
-                Clear Completed
-              </button>
-              <button className="text-red-400 transition hover:text-red-600">
-                Delete All
-              </button>
-            </div>
-          </div>
+          <TodoActions tasks={data.tasks} />
         </div>
 
         <div className="border border-gray-300 bg-white/90 px-4 py-2 dark:border-gray-700 dark:bg-gray-900">
