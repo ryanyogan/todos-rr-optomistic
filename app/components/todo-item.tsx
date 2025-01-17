@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useFetcher, useFetchers } from "react-router";
-import type { Item } from "~/types";
+import { INTENTS, type Item } from "~/types";
 import {
   DeleteIcon,
   EditIcon,
@@ -30,13 +30,13 @@ export function TodoItem(props: { todo: Item }) {
   const isClearingCompleted = fetchers.some(
     (fetcher) =>
       fetcher.state === "submitting" &&
-      fetcher.formData?.get("intent") === "CLEAR_COMPLETED"
+      fetcher.formData?.get("intent") === INTENTS.clearCompleted
   );
 
   const isDeletingAll = fetchers.some(
     (fetcher) =>
       fetcher.state === "submitting" &&
-      fetcher.formData?.get("intent") === "DELETE_ALL"
+      fetcher.formData?.get("intent") === INTENTS.deleteAll
   );
 
   const actionInProgress =
@@ -44,10 +44,11 @@ export function TodoItem(props: { todo: Item }) {
 
   const isToggleCompletion =
     fetcher.state !== "idle" &&
-    fetcher.formData?.get("intent") === "TOGGLE_COMPLETION";
+    fetcher.formData?.get("intent") === INTENTS.toggleCompletion;
 
   const isSaving =
-    fetcher.state !== "idle" && fetcher.formData?.get("intent") === "SAVE_TASK";
+    fetcher.state !== "idle" &&
+    fetcher.formData?.get("intent") === INTENTS.saveTask;
 
   const completed = isToggleCompletion
     ? !JSON.parse(fetcher.formData?.get("completed") as string)
@@ -80,7 +81,7 @@ export function TodoItem(props: { todo: Item }) {
           aria-label={`Mark task as ${completed ? "incomplete" : "complete"}`}
           disabled={editing || actionInProgress}
           name="intent"
-          value="TOGGLE_COMPLETION"
+          value={INTENTS.toggleCompletion}
           className="rounded-full border border-gray-200 p-1 transition hover:bg-gray-200 disabled:pointer-events-none disabled:opacity-25 dark:border-gray-700 dark:hover:bg-gray-700"
         >
           {completed ? (
@@ -126,19 +127,19 @@ export function TodoItem(props: { todo: Item }) {
           const submitter = (event.nativeEvent as SubmitEvent)
             .submitter as HTMLButtonElement;
 
-          if (submitter.value === "EDIT_TASK") {
+          if (submitter.value === INTENTS.editTask) {
             setIsEditing(true);
             event.preventDefault();
             return;
           }
 
-          if (submitter.value === "SAVE_TASK") {
+          if (submitter.value === INTENTS.saveTask) {
             setIsEditing(false);
             return;
           }
 
           if (
-            submitter.value === "DELETE_TASK" &&
+            submitter.value === INTENTS.deleteTask &&
             !confirm("Are you sure you want to delete this task?")
           ) {
             event.preventDefault();
@@ -159,7 +160,7 @@ export function TodoItem(props: { todo: Item }) {
               aria-label="SAVE_TASK"
               disabled={actionInProgress}
               name="intent"
-              value="SAVE_TASK"
+              value={INTENTS.saveTask}
               className="rounded-full border border-gray-200 p-1 transition hover:bg-gray-200 dark:border-gray-700 dark:hover:bg-gray-700"
             >
               <SaveIcon className="h-4 w-4" />
@@ -170,7 +171,7 @@ export function TodoItem(props: { todo: Item }) {
             aria-label="EDIT_TASK"
             disabled={completed || actionInProgress}
             name="intent"
-            value="EDIT_TASK"
+            value={INTENTS.editTask}
             className="rounded-full border border-gray-200 p-1 transition hover:bg-gray-200 disabled:pointer-events-none disabled:opacity-25 dark:border-gray-700 dark:hover:bg-gray-700"
           >
             <EditIcon className="h-4 w-4" />
@@ -180,7 +181,7 @@ export function TodoItem(props: { todo: Item }) {
           aria-label="DELETE_TASK"
           disabled={completed || editing || actionInProgress}
           name="intent"
-          value="DELETE_TASK"
+          value={INTENTS.deleteTask}
           className="rounded-full border border-gray-200 p-1 transition hover:bg-gray-200 disabled:pointer-events-none disabled:opacity-25 dark:border-gray-700 dark:hover:bg-gray-700"
         >
           <DeleteIcon className="h-4 w-4" />

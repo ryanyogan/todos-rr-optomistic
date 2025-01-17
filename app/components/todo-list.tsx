@@ -1,6 +1,6 @@
 import { useMemo } from "react";
 import { useFetchers } from "react-router";
-import type { Item, View } from "~/types";
+import { INTENTS, type Item, type View } from "~/types";
 import { TodoItem } from "./todo-item";
 
 export function TodoList(props: { todos: Item[]; view: View }) {
@@ -9,14 +9,14 @@ export function TodoList(props: { todos: Item[]; view: View }) {
   const isDeleting = fetchers.some(
     (fetcher) =>
       fetcher.state !== "idle" &&
-      fetcher.formData?.get("intent") === "DELETE_TASK"
+      fetcher.formData?.get("intent") === INTENTS.deleteTask
   );
 
   const deltingTodoIds = fetchers
     .filter(
       (fetcher) =>
         fetcher.state !== "idle" &&
-        fetcher.formData?.get("intent") === "DELETE_TASK"
+        fetcher.formData?.get("intent") === INTENTS.deleteTask
     )
     .map((fetcher) => fetcher.formData?.get("id"));
 

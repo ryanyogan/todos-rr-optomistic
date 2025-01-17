@@ -1,5 +1,5 @@
 import { useFetcher, useFetchers } from "react-router";
-import type { Item } from "~/types";
+import { INTENTS, type Item } from "~/types";
 
 export function TodoActions(props: { tasks: Item[] }) {
   const fetcher = useFetcher();
@@ -7,29 +7,29 @@ export function TodoActions(props: { tasks: Item[] }) {
 
   const isClearingCompleted =
     fetcher.state === "submitting" &&
-    fetcher.formData?.get("intent") === "CLEAR_COMPLETED";
+    fetcher.formData?.get("intent") === INTENTS.clearCompleted;
 
   const isDeletingAll =
     fetcher.state === "submitting" &&
-    fetcher.formData?.get("intent") === "DELETE_ALL";
+    fetcher.formData?.get("intent") === INTENTS.deleteAll;
 
   const isTogglingCompletion = fetchers.some(
     (fetcher) =>
       fetcher.state !== "idle" &&
-      fetcher.formData?.get("intent") === "TOGGLE_COMPLETION"
+      fetcher.formData?.get("intent") === INTENTS.toggleCompletion
   );
 
   const isDeleting = fetchers.some(
     (fetcher) =>
       fetcher.state !== "idle" &&
-      fetcher.formData?.get("intent") === "DELETE_TASK"
+      fetcher.formData?.get("intent") === INTENTS.deleteTask
   );
 
   const completingTodoIds = fetchers
     .filter(
       (fetcher) =>
         fetcher.state !== "idle" &&
-        fetcher.formData?.get("intent") === "TOGGLE_COMPLETION"
+        fetcher.formData?.get("intent") === INTENTS.toggleCompletion
     )
     .map((fetcher) => ({
       id: fetcher.formData?.get("id"),
@@ -40,7 +40,7 @@ export function TodoActions(props: { tasks: Item[] }) {
     .filter(
       (fetcher) =>
         fetcher.state !== "idle" &&
-        fetcher.formData?.get("intent") === "DELETE_TASK"
+        fetcher.formData?.get("intent") === INTENTS.deleteTask
     )
     .map((fetcher) => fetcher.formData?.get("id"));
 
@@ -76,13 +76,13 @@ export function TodoActions(props: { tasks: Item[] }) {
             .submitter as HTMLButtonElement;
 
           if (
-            submitter.value === "CLEAR_COMPLETED" &&
+            submitter.value === INTENTS.clearCompleted &&
             !confirm("Are you sure you want to clear all completed tasks?")
           ) {
             event.preventDefault();
             return;
           } else if (
-            submitter.value === "DELETE_ALL" &&
+            submitter.value === INTENTS.deleteAll &&
             !confirm("Are you sure you want to delete all tasks?")
           ) {
             event.preventDefault();
@@ -95,7 +95,7 @@ export function TodoActions(props: { tasks: Item[] }) {
             !tasks.some((todo) => todo.completed) || isClearingCompleted
           }
           name="intent"
-          value="CLEAR_COMPLETED"
+          value={INTENTS.clearCompleted}
           className="text-red-400 transition hover:text-red-600 disabled:pointer-events-none disabled:opacity-25"
         >
           {isClearingCompleted ? "Clearing..." : "Clear Completed"}
@@ -103,7 +103,7 @@ export function TodoActions(props: { tasks: Item[] }) {
         <button
           disabled={tasks.length === 0 || isDeletingAll}
           name="intent"
-          value="DELETE_ALL"
+          value={INTENTS.deleteAll}
           className="text-red-400 transition hover:text-red-600 disabled:pointer-events-none disabled:opacity-25"
         >
           {isDeletingAll ? "Deleting..." : "Delete All"}
