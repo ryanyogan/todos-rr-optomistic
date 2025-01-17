@@ -1,4 +1,4 @@
-import { data, Link, useFetcher } from "react-router";
+import { data, Form, Link, useFetcher, useSearchParams } from "react-router";
 import invariant from "tiny-invariant";
 import { TodoActions } from "~/components/todo-actions";
 import { TodoList } from "~/components/todo-list";
@@ -84,6 +84,8 @@ export async function action(props: Route.ActionArgs) {
 export default function Home(props: Route.ComponentProps) {
   const data = props.loaderData;
   const fetcher = useFetcher();
+  const [searchParams] = useSearchParams();
+  const view = searchParams.get("view") || "all";
 
   return (
     <div className="flex flex-1 flex-col md:mx-auto md:w-[720px]">
@@ -122,7 +124,7 @@ export default function Home(props: Route.ComponentProps) {
         <div className="border border-gray-300 bg-white/90 px-4 py-2 dark:border-gray-700 dark:bg-gray-900">
           {data.tasks.length > 0 ? (
             <ul>
-              <TodoList todos={data.tasks} />
+              <TodoList todos={data.tasks} view={view} />
             </ul>
           ) : (
             <p className="text-center leading-7">No tasks available</p>
@@ -134,26 +136,40 @@ export default function Home(props: Route.ComponentProps) {
         </div>
 
         <div className="border border-gray-300 bg-white/90 px-4 py-2 dark:border-gray-700 dark:bg-gray-900">
-          <div className="flex items-center justify-center gap-12 text-sm">
+          <Form className="flex items-center justify-center gap-12 text-sm">
             <button
+              name="view"
+              value="all"
               aria-label="View all tasks"
-              className="opacity-50 transition hover:opacity-100"
+              className={`transition ${
+                view === "all" ? "font-bold" : "opacity-50 hover:opacity-100"
+              }`}
             >
               All
             </button>
             <button
+              name="view"
+              value="active"
               aria-label="View active tasks"
-              className="opacity-50 transition hover:opacity-100"
+              className={`transition ${
+                view === "active" ? "font-bold" : "opacity-50 hover:opacity-100"
+              }`}
             >
               Active
             </button>
             <button
+              name="view"
+              value="completed"
               aria-label="View completed"
-              className="opacity-50 transition hover:opacity-100"
+              className={`transition ${
+                view === "completed"
+                  ? "font-bold"
+                  : "opacity-50 hover:opacity-100"
+              }`}
             >
               Completed
             </button>
-          </div>
+          </Form>
         </div>
       </main>
 

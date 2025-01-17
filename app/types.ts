@@ -54,3 +54,5 @@ export interface Todo {
    */
   deleteAll: () => Promise<Item[]>;
 }
+
+export type View = "all" | "active" | "completed";
