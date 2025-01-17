@@ -9,7 +9,7 @@ import {
 
 import type { Route } from "./+types/root";
 import "./app.css";
-import { useTheme } from "./components/theme-script";
+import { ThemeScript, useTheme } from "./components/theme-script";
 import { parseTheme } from "./lib/theme-cookie.server";
 
 export async function loader(props: Route.LoaderArgs) {
@@ -29,6 +29,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
       className={`bg-white/90 font-system antialiased dark:bg-gray-900 ${theme}`}
     >
       <head>
+        <ThemeScript />
         <meta charSet="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <Meta />
