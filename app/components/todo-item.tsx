@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useFetcher } from "react-router";
+import { useFetcher, useFetchers } from "react-router";
 import type { Item } from "~/types";
 import {
   DeleteIcon,
@@ -21,10 +21,46 @@ const dateFormatter = new Intl.DateTimeFormat("en-US", {
 
 export function TodoItem(props: { todo: Item }) {
   const fetcher = useFetcher();
+  const fetchers = useFetchers();
   const [isEditing, setIsEditing] = useState(false);
 
   const editing =
     typeof document !== "undefined" ? isEditing : props.todo.editing;
+
+  const isClearingCompleted = fetchers.some(
+    (fetcher) =>
+      fetcher.state === "submitting" &&
+      fetcher.formData?.get("intent") === "CLEAR_COMPLETED"
+  );
+
+  const isDeletingAll = fetchers.some(
+    (fetcher) =>
+      fetcher.state === "submitting" &&
+      fetcher.formData?.get("intent") === "DELETE_ALL"
+  );
+
+  const actionInProgress =
+    isDeletingAll || (props.todo.completed && isClearingCompleted);
+
+  const isToggleCompletion =
+    fetcher.state !== "idle" &&
+    fetcher.formData?.get("intent") === "TOGGLE_COMPLETION";
+
+  const isSaving =
+    fetcher.state !== "idle" && fetcher.formData?.get("intent") === "SAVE_TASK";
+
+  const completed = isToggleCompletion
+    ? !JSON.parse(fetcher.formData?.get("completed") as string)
+    : props.todo.completed;
+
+  const completedAt =
+    isToggleCompletion || !props.todo.completedAt
+      ? new Date()
+      : props.todo.completedAt;
+
+  const description = isSaving
+    ? (fetcher.formData?.get("description") as string)
+    : props.todo.description;
 
   return (
     <li
@@ -34,21 +70,20 @@ export function TodoItem(props: { todo: Item }) {
     >
       <fetcher.Form method="post">
         <input type="hidden" name="id" value={props.todo.id} />
+        <input type="hidden" name="completed" value={`${completed}`} />
         <input
           type="hidden"
           name="completed"
           value={`${props.todo.completed}`}
         />
         <button
-          aria-label={`Mark task as ${
-            props.todo.completed ? "incomplete" : "complete"
-          }`}
-          disabled={editing}
+          aria-label={`Mark task as ${completed ? "incomplete" : "complete"}`}
+          disabled={editing || actionInProgress}
           name="intent"
           value="TOGGLE_COMPLETION"
           className="rounded-full border border-gray-200 p-1 transition hover:bg-gray-200 disabled:pointer-events-none disabled:opacity-25 dark:border-gray-700 dark:hover:bg-gray-700"
         >
-          {props.todo.completed ? (
+          {completed ? (
             <SquareCheckIcon className="h-4 w-4" />
           ) : (
             <SquareIcon className="h-4 w-4" />
@@ -59,10 +94,10 @@ export function TodoItem(props: { todo: Item }) {
       {!editing && (
         <div
           className={`flex-1 space-y-0.5 ${
-            props.todo.completed ? "opacity-25" : ""
+            completed || actionInProgress ? "opacity-25" : ""
           }`}
         >
-          <p>{props.todo.description}</p>
+          <p>{description}</p>
           <div className="space-y-0.5 text-xs">
             <p>
               Created at{" "}
@@ -72,15 +107,11 @@ export function TodoItem(props: { todo: Item }) {
                 {dateFormatter.format(new Date(props.todo.createdAt))}
               </time>
             </p>
-            {props.todo.completed && (
+            {completed && (
               <p>
                 Completed at{" "}
-                <time
-                  dateTime={`${new Date(
-                    props.todo.completedAt!
-                  ).toISOString()}`}
-                >
-                  {dateFormatter.format(new Date(props.todo.completedAt!))}
+                <time dateTime={`${new Date(completedAt).toISOString()}`}>
+                  {dateFormatter.format(new Date(completedAt))}
                 </time>
               </p>
             )}
@@ -120,12 +151,13 @@ export function TodoItem(props: { todo: Item }) {
           <>
             <input
               name="description"
-              defaultValue={props.todo.description}
+              defaultValue={description}
               required
               className="flex-1 rounded-full border-2 px-3 py-2 text-sm text-black"
             />
             <button
               aria-label="SAVE_TASK"
+              disabled={actionInProgress}
               name="intent"
               value="SAVE_TASK"
               className="rounded-full border border-gray-200 p-1 transition hover:bg-gray-200 dark:border-gray-700 dark:hover:bg-gray-700"
@@ -136,7 +168,7 @@ export function TodoItem(props: { todo: Item }) {
         ) : (
           <button
             aria-label="EDIT_TASK"
-            disabled={props.todo.completed}
+            disabled={completed || actionInProgress}
             name="intent"
             value="EDIT_TASK"
             className="rounded-full border border-gray-200 p-1 transition hover:bg-gray-200 disabled:pointer-events-none disabled:opacity-25 dark:border-gray-700 dark:hover:bg-gray-700"
@@ -146,7 +178,7 @@ export function TodoItem(props: { todo: Item }) {
         )}
         <button
           aria-label="DELETE_TASK"
-          disabled={props.todo.completed || editing}
+          disabled={completed || editing || actionInProgress}
           name="intent"
           value="DELETE_TASK"
           className="rounded-full border border-gray-200 p-1 transition hover:bg-gray-200 disabled:pointer-events-none disabled:opacity-25 dark:border-gray-700 dark:hover:bg-gray-700"

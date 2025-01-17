@@ -1,3 +1,4 @@
+import { useEffect, useRef } from "react";
 import { data, Form, Link, useFetcher, useSearchParams } from "react-router";
 import invariant from "tiny-invariant";
 import { TodoActions } from "~/components/todo-actions";
@@ -88,6 +89,20 @@ export default function Home(props: Route.ComponentProps) {
   const [searchParams] = useSearchParams();
   const view = searchParams.get("view") || "all";
 
+  const addFormRef = useRef<HTMLFormElement>(null);
+  const addInputRef = useRef<HTMLInputElement>(null);
+
+  const isAdding =
+    fetcher.state === "submitting" &&
+    fetcher.formData?.get("intent") === "CREATE_TASK";
+
+  useEffect(() => {
+    if (!isAdding) {
+      addFormRef.current?.reset();
+      addInputRef.current?.focus();
+    }
+  }, [isAdding]);
+
   return (
     <div className="flex flex-1 flex-col md:mx-auto md:w-[720px]">
       <header className="mb-12 flex items-center justify-between">
@@ -101,11 +116,16 @@ export default function Home(props: Route.ComponentProps) {
 
       <main className="flex-1 space-y-8">
         <fetcher.Form
+          ref={addFormRef}
           method="post"
           className="border border-gray-300 bg-white/90 dark:border-gray-700 dark:bg-gray-900"
         >
-          <fieldset className="flex items-center gap-2 p-2 text-sm">
+          <fieldset
+            disabled={isAdding}
+            className="flex items-center gap-2 p-2 text-sm disabled:pointer-events-none disabled:opacity-25"
+          >
             <input
+              ref={addInputRef}
               type="text"
               name="description"
               placeholder="Create a new todo..."
@@ -117,7 +137,7 @@ export default function Home(props: Route.ComponentProps) {
               value="CREATE_TASK"
               className="border border-gray-300 px-3 bg-zinc-300/40 py-1.5 text-base font-black transition hover:border-gray-500 sm:px-6"
             >
-              Add
+              {isAdding ? "Adding..." : "Add"}
             </button>
           </fieldset>
         </fetcher.Form>
