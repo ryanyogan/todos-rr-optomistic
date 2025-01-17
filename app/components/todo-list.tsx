@@ -1,8 +1,11 @@
 import { useMemo } from "react";
-import type { Item, View } from "~/types";
+import type { Item } from "~/types";
 import { TodoItem } from "./todo-item";
 
-export function TodoList(props: { todos: Item[]; view: View }) {
+export function TodoList(props: {
+  todos: Item[];
+  view: "active" | "all" | "completed";
+}) {
   const visibleTodos = useMemo(() => {
     return props.todos.filter((todo) => {
       return props.view === "active"
