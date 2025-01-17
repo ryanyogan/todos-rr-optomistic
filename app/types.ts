@@ -56,3 +56,5 @@ export interface Todo {
 }
 
 export type View = "all" | "active" | "completed";
+
+export type Theme = "system" | "light" | "dark";

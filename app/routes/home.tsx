@@ -1,6 +1,7 @@
 import { useEffect, useRef } from "react";
 import { data, Form, Link, useFetcher, useSearchParams } from "react-router";
 import invariant from "tiny-invariant";
+import { ThemeSwitcher } from "~/components/theme-switcher";
 import { TodoActions } from "~/components/todo-actions";
 import { TodoList } from "~/components/todo-list";
 import { todos } from "~/lib/db.server";
@@ -107,11 +108,7 @@ export default function Home(props: Route.ComponentProps) {
     <div className="flex flex-1 flex-col md:mx-auto md:w-[720px]">
       <header className="mb-12 flex items-center justify-between">
         <h1 className="text-4xl font-thin lg:text-5xl font-serif">Things</h1>
-        <select className="appearance-none border border-gray-300 cursor-pointer bg-gray-50 px-4 py-2 rounded-sm dark:border-gray-700 dark:bg-gray-900">
-          <option>System</option>
-          <option>Light</option>
-          <option>Dark</option>
-        </select>
+        <ThemeSwitcher />
       </header>
 
       <main className="flex-1 space-y-8">
