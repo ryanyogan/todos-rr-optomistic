@@ -1,12 +1,90 @@
 import { useEffect, useRef } from "react";
-import { Form, Link, useFetcher, useSearchParams } from "react-router";
+import { data, Form, Link, useFetcher, useSearchParams } from "react-router";
+import invariant from "tiny-invariant";
 import { ThemeSwitcher } from "~/components/theme-switcher";
 import { TodoActions } from "~/components/todo-actions";
 import { TodoList } from "~/components/todo-list";
+import { todos } from "~/lib/db.server";
 import { INTENTS, type View } from "~/types";
-import type { Route } from "../+types";
+import type { Route } from "./+types/home";
 
-export function Home(props: Route.ComponentProps) {
+export function meta({}: Route.MetaArgs) {
+  return [
+    { title: "Things" },
+    { name: "description", content: "Learn React Router with Things!" },
+  ];
+}
+
+export async function loader() {
+  return data({ tasks: await todos.read() });
+}
+
+export async function action(props: Route.ActionArgs) {
+  const formData = await props.request.formData();
+  const intent = formData.get("intent") as string;
+  invariant(intent, "Intent is required");
+
+  switch (intent) {
+    case INTENTS.createTask: {
+      const description = formData.get("description") as string;
+      invariant(description, "Description is required");
+
+      await todos.create(description);
+      break;
+    }
+
+    case INTENTS.toggleCompletion: {
+      const id = formData.get("id") as string;
+      const completed = formData.get("completed") as string;
+
+      await todos.update(id, {
+        completed: !JSON.parse(completed),
+        completedAt: !JSON.parse(completed) ? new Date() : undefined,
+      });
+      break;
+    }
+
+    case INTENTS.editTask: {
+      const id = formData.get("id") as string;
+
+      await todos.update(id, { editing: true });
+      break;
+    }
+
+    case INTENTS.saveTask: {
+      const id = formData.get("id") as string;
+      const description = formData.get("description") as string;
+
+      await todos.update(id, { description, editing: false });
+      break;
+    }
+
+    case INTENTS.deleteTask: {
+      const id = formData.get("id") as string;
+
+      await todos.delete(id);
+      break;
+    }
+
+    case INTENTS.clearCompleted: {
+      await todos.clearCompleted();
+      break;
+    }
+
+    case INTENTS.deleteAll: {
+      await todos.deleteAll();
+      break;
+    }
+
+    default: {
+      throw new Response(`Unknown Intent: ${intent}`, { status: 400 });
+    }
+  }
+
+  return data({ ok: true });
+}
+
+export default function Home(props: Route.ComponentProps) {
   const data = props.loaderData;
   const fetcher = useFetcher();
   const [searchParams] = useSearchParams();
