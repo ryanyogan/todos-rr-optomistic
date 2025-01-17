@@ -4,7 +4,7 @@ import { ThemeSwitcher } from "~/components/theme-switcher";
 import { TodoActions } from "~/components/todo-actions";
 import { TodoList } from "~/components/todo-list";
 import { INTENTS, type View } from "~/types";
-import type { Route } from "../+types/home";
+import type { Route } from "../+types";
 
 export function Home(props: Route.ComponentProps) {
   const data = props.loaderData;

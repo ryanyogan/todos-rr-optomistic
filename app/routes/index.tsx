@@ -2,7 +2,7 @@ import { data } from "react-router";
 import invariant from "tiny-invariant";
 import { todos } from "~/lib/db.server";
 import { INTENTS } from "~/types";
-import type { Route } from "./+types/home";
+import type { Route } from "./+types";
 import { Home } from "./components/home";
 
 export function meta({}: Route.MetaArgs) {
