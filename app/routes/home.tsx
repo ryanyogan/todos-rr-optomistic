@@ -3,6 +3,7 @@ import invariant from "tiny-invariant";
 import { TodoActions } from "~/components/todo-actions";
 import { TodoList } from "~/components/todo-list";
 import { todos } from "~/lib/db.server";
+import type { View } from "~/types";
 import type { Route } from "./+types/home";
 
 export function meta({}: Route.MetaArgs) {
@@ -124,7 +125,7 @@ export default function Home(props: Route.ComponentProps) {
         <div className="border border-gray-300 bg-white/90 px-4 py-2 dark:border-gray-700 dark:bg-gray-900">
           {data.tasks.length > 0 ? (
             <ul>
-              <TodoList todos={data.tasks} view={view} />
+              <TodoList todos={data.tasks} view={view as View} />
             </ul>
           ) : (
             <p className="text-center leading-7">No tasks available</p>
