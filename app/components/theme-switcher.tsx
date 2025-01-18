@@ -15,7 +15,7 @@ export function ThemeSwitcher() {
         aria-haspopup="listbox"
         aria-label="Select your theme preference"
         tabIndex={0}
-        className="flex w-28 items-center justify-between rounded-3xl border border-gray-200 bg-gray-50 px-4 py-2 transition hover:border-gray-500 group-open:before:fixed group-open:before:inset-0 group-open:before:cursor-auto dark:border-gray-700 dark:bg-gray-900 [&::-webkit-details-marker]:hidden"
+        className="flex w-28 items-center justify-between border border-gray-200 bg-gray-50 px-4 py-2 transition hover:border-gray-500 group-open:before:fixed group-open:before:inset-0 group-open:before:cursor-auto dark:border-gray-700 dark:bg-gray-900 [&::-webkit-details-marker]:hidden"
       >
         {theme.replace(/^./, (c) => c.toUpperCase())}
         <UpDownIcon className="ml-2 h-4 w-4" />

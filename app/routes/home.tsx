@@ -53,7 +53,7 @@ export default function Home(props: Route.ComponentProps) {
   return (
     <div className="flex flex-1 flex-col md:mx-auto md:w-[720px]">
       <header className="mb-12 flex items-center justify-between">
-        <h1 className="text-4xl font-thin lg:text-5xl font-serif">Things</h1>
+        <h1 className="font-thin text-5xl">Things</h1>
         <ThemeSwitcher />
       </header>
 
