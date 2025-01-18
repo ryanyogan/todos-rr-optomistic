@@ -53,7 +53,7 @@ export default function Home(props: Route.ComponentProps) {
   return (
     <div className="flex flex-1 flex-col md:mx-auto md:w-[720px]">
       <header className="mb-12 flex items-center justify-between">
-        <h1 className="font-thin text-5xl">Things</h1>
+        <h1 className="font-thin text-5xl dark:text-zinc-100">Things</h1>
         <ThemeSwitcher />
       </header>
 
@@ -61,7 +61,7 @@ export default function Home(props: Route.ComponentProps) {
         <fetcher.Form
           ref={addFormRef}
           method="post"
-          className="border border-gray-300 bg-white/90 dark:border-gray-700 dark:bg-gray-900"
+          className="border border-zinc-200 bg-white/90 dark:border-gray-700 dark:bg-gray-900"
         >
           <fieldset
             disabled={isAdding}
@@ -73,19 +73,19 @@ export default function Home(props: Route.ComponentProps) {
               name="description"
               placeholder="Create a new todo..."
               required
-              className="flex-1 border border-gray-200 px-3 py-2 text-sm font-bold text-black dark:border-white/50"
+              className="flex-1 border border-zinc-200 px-3 py-2 text-sm placeholder:font-thin text-zinc-900 dark:border-white/50"
             />
             <button
               name="intent"
               value={INTENTS.createTask}
-              className="border border-gray-300 px-3 bg-zinc-300/40 py-1.5 text-base font-black transition hover:border-gray-500 sm:px-6"
+              className="border border-zinc-200 px-3 bg-zinc-300/20 dark:bg-zinc-800 dark:border-zinc-700 py-1.5 text-base font-thin transition hover:border-gray-500 sm:px-6"
             >
               {isAdding ? "Adding..." : "Add"}
             </button>
           </fieldset>
         </fetcher.Form>
 
-        <div className="border border-gray-300 bg-white/90 px-4 py-2 dark:border-gray-700 dark:bg-gray-900">
+        <div className="border border-zinc-200 bg-white/90 px-4 py-2 dark:border-gray-700 dark:bg-gray-900">
           {data.tasks.length > 0 ? (
             <ul>
               <TodoList todos={data.tasks} view={view as View} />
@@ -95,11 +95,11 @@ export default function Home(props: Route.ComponentProps) {
           )}
         </div>
 
-        <div className="border border-gray-300 bg-white/90 px-4 py-2 dark:border-gray-700 dark:bg-gray-900">
+        <div className="border border-zinc-200 bg-white/90 px-4 py-2 dark:border-gray-700 dark:bg-gray-900">
           <TodoActions tasks={data.tasks} />
         </div>
 
-        <div className="border border-gray-300 bg-white/90 px-4 py-2 dark:border-gray-700 dark:bg-gray-900">
+        <div className="border border-zinc-200 bg-white/90 px-4 py-2 dark:border-gray-700 dark:bg-gray-900">
           <Form className="flex items-center justify-center gap-12 text-sm">
             <button
               name="view"

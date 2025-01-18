@@ -1,13 +1,9 @@
 import { useState } from "react";
 import { useFetcher, useFetchers } from "react-router";
 import { INTENTS, type Item } from "~/types";
-import {
-  DeleteIcon,
-  EditIcon,
-  SaveIcon,
-  SquareCheckIcon,
-  SquareIcon,
-} from "./icons";
+import { DeleteIcon, EditIcon, SaveIcon } from "./icons";
+
+import { CheckCircleIcon, CircleIcon } from "lucide-react";
 
 const dateFormatter = new Intl.DateTimeFormat("en-US", {
   day: "numeric",
@@ -85,9 +81,9 @@ export function TodoItem(props: { todo: Item }) {
           className="rounded-full border border-gray-200 p-1 transition hover:bg-gray-200 disabled:pointer-events-none disabled:opacity-25 dark:border-gray-700 dark:hover:bg-gray-700"
         >
           {completed ? (
-            <SquareCheckIcon className="h-4 w-4" />
+            <CheckCircleIcon className="size-4 text-sky-400" />
           ) : (
-            <SquareIcon className="h-4 w-4" />
+            <CircleIcon className="h-4 w-4 text-gray-300" />
           )}
         </button>
       </fetcher.Form>
@@ -98,8 +94,8 @@ export function TodoItem(props: { todo: Item }) {
             completed || actionInProgress ? "opacity-25" : ""
           }`}
         >
-          <p>{description}</p>
-          <div className="space-y-0.5 text-xs">
+          <p className="dark:text-zinc-400">{description}</p>
+          <div className="space-y-0.5 text-xs text-zinc-500">
             <p>
               Created at{" "}
               <time
