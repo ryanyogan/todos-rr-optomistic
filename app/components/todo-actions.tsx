@@ -62,10 +62,18 @@ export function TodoActions(props: { tasks: Item[] }) {
     ? tasks.filter((task) => !deletingTodoIds.includes(task.id))
     : tasks;
 
+  const remainingTaskCount = tasks.reduce((acc, task) => {
+    if (!task.completed) {
+      return acc + 1;
+    }
+
+    return acc;
+  }, 0);
+
   return (
     <div className="flex items-center justify-between gap-4 text-sm">
-      <p className="text-center leading-7">
-        {tasks.length} {tasks.length === 1 ? "item" : "items"} left
+      <p className="text-center text-sm text-blue-400  border border-sky-200 bg-sky-100 dark:bg-slate-700 dark:border-slate-600 dark:text-sky-400 px-2 py-1 rounded-md">
+        {remainingTaskCount} {remainingTaskCount === 1 ? "item" : "items"} left
       </p>
 
       <fetcher.Form
@@ -96,7 +104,7 @@ export function TodoActions(props: { tasks: Item[] }) {
           }
           name="intent"
           value={INTENTS.clearCompleted}
-          className="text-red-400 transition hover:text-red-600 disabled:pointer-events-none disabled:opacity-25"
+          className="text-zinc-800 dark:text-sky-600 underline text-xs transition hover:text-red-800 disabled:pointer-events-none disabled:opacity-25"
         >
           {isClearingCompleted ? "Clearing..." : "Clear Completed"}
         </button>
@@ -104,7 +112,7 @@ export function TodoActions(props: { tasks: Item[] }) {
           disabled={tasks.length === 0 || isDeletingAll}
           name="intent"
           value={INTENTS.deleteAll}
-          className="text-red-400 transition hover:text-red-600 disabled:pointer-events-none disabled:opacity-25"
+          className="text-zinc-800 dark:text-sky-600 text-xs underline transition hover:text-red-800 disabled:pointer-events-none disabled:opacity-25"
         >
           {isDeletingAll ? "Deleting..." : "Delete All"}
         </button>

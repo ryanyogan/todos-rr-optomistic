@@ -52,55 +52,32 @@ export default function Home(props: Route.ComponentProps) {
 
   return (
     <div className="flex flex-1 flex-col md:mx-auto md:w-[720px]">
-      <header className="mb-12 flex items-center justify-between">
-        <h1 className="font-thin text-5xl dark:text-zinc-100">Things</h1>
-        <ThemeSwitcher />
+      <header className="mb-12 flex items-center justify-center">
+        <h1 className="font-sans font-thin text-5xl dark:text-zinc-100">
+          Things
+        </h1>
       </header>
 
-      <main className="flex-1 space-y-8">
-        <fetcher.Form
-          ref={addFormRef}
-          method="post"
-          className="border border-zinc-200 bg-white/90 dark:border-gray-700 dark:bg-gray-900"
-        >
+      <main className="flex-1 space-y-4">
+        <fetcher.Form ref={addFormRef} method="post" className="">
           <fieldset
             disabled={isAdding}
             className="flex items-center gap-2 p-2 text-sm disabled:pointer-events-none disabled:opacity-25"
           >
+            <input type="hidden" name="intent" value={INTENTS.createTask} />
             <input
               ref={addInputRef}
               type="text"
               name="description"
               placeholder="Create a new todo..."
               required
-              className="flex-1 border border-zinc-200 px-3 py-2 text-sm placeholder:font-thin text-zinc-900 dark:border-white/50"
+              className="flex-1 rounded-md text-[16px] px-3 py-2 text-sm text-zinc-900 dark:border-zinc-600 dark:bg-slate-800 dark:text-zinc-400"
             />
-            <button
-              name="intent"
-              value={INTENTS.createTask}
-              className="border border-zinc-200 px-3 bg-zinc-300/20 dark:bg-zinc-800 dark:border-zinc-700 py-1.5 text-base font-thin transition hover:border-gray-500 sm:px-6"
-            >
-              {isAdding ? "Adding..." : "Add"}
-            </button>
           </fieldset>
         </fetcher.Form>
 
-        <div className="border border-zinc-200 bg-white/90 px-4 py-2 dark:border-gray-700 dark:bg-gray-900">
-          {data.tasks.length > 0 ? (
-            <ul>
-              <TodoList todos={data.tasks} view={view as View} />
-            </ul>
-          ) : (
-            <p className="text-center leading-7">No tasks available</p>
-          )}
-        </div>
-
-        <div className="border border-zinc-200 bg-white/90 px-4 py-2 dark:border-gray-700 dark:bg-gray-900">
-          <TodoActions tasks={data.tasks} />
-        </div>
-
-        <div className="border border-zinc-200 bg-white/90 px-4 py-2 dark:border-gray-700 dark:bg-gray-900">
-          <Form className="flex items-center justify-center gap-12 text-sm">
+        <div className="px-4 py-2">
+          <Form className="flex items-center justify-center gap-12 text-sm dark:text-sky-400">
             <button
               name="view"
               value="all"
@@ -135,16 +112,34 @@ export default function Home(props: Route.ComponentProps) {
             </button>
           </Form>
         </div>
+
+        <div className="px-4 py-2">
+          {data.tasks.length > 0 ? (
+            <ul>
+              <TodoList todos={data.tasks} view={view as View} />
+            </ul>
+          ) : (
+            <p className="text-center leading-7">No tasks available</p>
+          )}
+        </div>
+
+        <div className="px-4 py-2">
+          <TodoActions tasks={data.tasks} />
+        </div>
+
+        <div className="w-full flex justify-center p-8">
+          <ThemeSwitcher />
+        </div>
       </main>
 
       <footer className="mt-12">
-        <p className="text-center text-sm leading-loose">
+        <p className="text-center text-sm leading-loose dark:text-slate-500">
           Built by{" "}
           <Link
             to="https://ryanyogan.com"
             target="_blank"
             rel="noopener noreferrer"
-            className="relative font-medium text-slate-400 after:absolute after:-bottom-0.5 after:left-0 after:h-[1px] after:w-0 after:bg-white after:transition-all after:duration-300 hover:after:w-full dark:text-blue-500 dark:after:bg-blue-500"
+            className="relative font-medium text-slate-400  after:absolute after:-bottom-0.5 after:left-0 after:h-[1px] after:w-0 after:bg-white after:transition-all after:duration-300 hover:after:w-full dark:text-blue-500 dark:after:bg-blue-500"
           >
             Ryan Yogan
           </Link>

@@ -26,7 +26,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
   return (
     <html
       lang="en"
-      className={`bg-white/90 font-system antialiased dark:bg-zinc-900 ${theme}`}
+      className={`bg-zinc-100 font-system antialiased dark:bg-slate-900 ${theme}`}
     >
       <head>
         <ThemeScript />

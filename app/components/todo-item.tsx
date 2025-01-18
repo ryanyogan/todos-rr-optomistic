@@ -1,9 +1,14 @@
 import { useState } from "react";
 import { useFetcher, useFetchers } from "react-router";
 import { INTENTS, type Item } from "~/types";
-import { DeleteIcon, EditIcon, SaveIcon } from "./icons";
+import { SaveIcon } from "./icons";
 
-import { CheckCircleIcon, CircleIcon } from "lucide-react";
+import {
+  CheckCircleIcon,
+  CircleIcon,
+  PencilIcon,
+  TrashIcon,
+} from "lucide-react";
 
 const dateFormatter = new Intl.DateTimeFormat("en-US", {
   day: "numeric",
@@ -61,7 +66,7 @@ export function TodoItem(props: { todo: Item }) {
 
   return (
     <li
-      className={`my-4 flex gap-4 border-b border-dashed border-gray-200 pb-4 last:border-none last:pb-0 dark:border-gray-700 ${
+      className={`my-4 flex gap-4 items-center border-b border-dashed border-gray-200 pb-4 last:border-none last:pb-0 dark:border-gray-700 ${
         editing ? "items-center" : "items-start"
       }`}
     >
@@ -81,9 +86,9 @@ export function TodoItem(props: { todo: Item }) {
           className="rounded-full border border-gray-200 p-1 transition hover:bg-gray-200 disabled:pointer-events-none disabled:opacity-25 dark:border-gray-700 dark:hover:bg-gray-700"
         >
           {completed ? (
-            <CheckCircleIcon className="size-4 text-sky-400" />
+            <CheckCircleIcon className="size-3 text-sky-400" />
           ) : (
-            <CircleIcon className="h-4 w-4 text-gray-300" />
+            <CircleIcon className="size-3 text-gray-400" />
           )}
         </button>
       </fetcher.Form>
@@ -91,24 +96,25 @@ export function TodoItem(props: { todo: Item }) {
       {!editing && (
         <div
           className={`flex-1 space-y-0.5 ${
-            completed || actionInProgress ? "opacity-25" : ""
+            completed || actionInProgress ? "opacity-25 dark:opacity-40" : ""
           }`}
         >
-          <p className="dark:text-zinc-400">{description}</p>
-          <div className="space-y-0.5 text-xs text-zinc-500">
-            <p>
-              Created at{" "}
-              <time
-                dateTime={`${new Date(props.todo.createdAt).toISOString()}`}
-              >
-                {dateFormatter.format(new Date(props.todo.createdAt))}
-              </time>
-            </p>
-            {completed && (
+          <p className="dark:text-zinc-200 text-zinc-700">{description}</p>
+          <div className="text-xs text-zinc-500">
+            {completed ? (
               <p>
                 Completed at{" "}
                 <time dateTime={`${new Date(completedAt).toISOString()}`}>
                   {dateFormatter.format(new Date(completedAt))}
+                </time>
+              </p>
+            ) : (
+              <p>
+                Created at{" "}
+                <time
+                  dateTime={`${new Date(props.todo.createdAt).toISOString()}`}
+                >
+                  {dateFormatter.format(new Date(props.todo.createdAt))}
                 </time>
               </p>
             )}
@@ -157,7 +163,7 @@ export function TodoItem(props: { todo: Item }) {
               disabled={actionInProgress}
               name="intent"
               value={INTENTS.saveTask}
-              className="rounded-full border border-gray-200 p-1 transition hover:bg-gray-200 dark:border-gray-700 dark:hover:bg-gray-700"
+              className="rounded-full border border-gray-200 dark:text-gray-400 p-1 transition hover:bg-gray-200 dark:border-gray-700 dark:hover:bg-gray-700"
             >
               <SaveIcon className="h-4 w-4" />
             </button>
@@ -168,9 +174,9 @@ export function TodoItem(props: { todo: Item }) {
             disabled={completed || actionInProgress}
             name="intent"
             value={INTENTS.editTask}
-            className="rounded-full border border-gray-200 p-1 transition hover:bg-gray-200 disabled:pointer-events-none disabled:opacity-25 dark:border-gray-700 dark:hover:bg-gray-700"
+            className="rounded-full border border-gray-200 p-1 transition dark:text-gray-400 hover:bg-gray-200 disabled:pointer-events-none disabled:opacity-25 dark:border-gray-700 dark:hover:bg-gray-700"
           >
-            <EditIcon className="h-4 w-4" />
+            <PencilIcon className="size-3" />
           </button>
         )}
         <button
@@ -178,9 +184,9 @@ export function TodoItem(props: { todo: Item }) {
           disabled={completed || editing || actionInProgress}
           name="intent"
           value={INTENTS.deleteTask}
-          className="rounded-full border border-gray-200 p-1 transition hover:bg-gray-200 disabled:pointer-events-none disabled:opacity-25 dark:border-gray-700 dark:hover:bg-gray-700"
+          className="rounded-full border border-gray-200 p-1 transition dark:text-gray-400 hover:bg-gray-200 disabled:pointer-events-none disabled:opacity-25 dark:border-gray-700 dark:hover:bg-gray-700"
         >
-          <DeleteIcon className="h-4 w-4" />
+          <TrashIcon className="size-3" />
         </button>
       </fetcher.Form>
     </li>
