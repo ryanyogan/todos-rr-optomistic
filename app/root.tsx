@@ -27,6 +27,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
     <html
       lang="en"
       className={`bg-zinc-100 font-system antialiased dark:bg-slate-900 ${theme}`}
+      suppressHydrationWarning
     >
       <head>
         <ThemeScript />
