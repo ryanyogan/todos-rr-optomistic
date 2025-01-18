@@ -63,7 +63,7 @@ export default function SignIn(props: Route.ComponentProps) {
                 type="email"
                 required
                 placeholder="Enter your email..."
-                className="w-full p-3 bg-gray-50 border-0 text-gray-600 placeholder-gray-400 text-sm font-light focus:outline-none focus:bg-gray-100 transition-colors"
+                className="w-full p-3 bg-gray-50 border-0 text-gray-600 placeholder-gray-400 text-[16px] font-light focus:outline-none focus:bg-gray-100 transition-colors"
               />
               {errors?.email && (
                 <p className="flex items-center text-sm font-medium leading-5 text-red-500">
@@ -82,7 +82,7 @@ export default function SignIn(props: Route.ComponentProps) {
                 required
                 autoComplete="new-password"
                 placeholder="Enter your password..."
-                className="w-full p-3 bg-gray-50 border-0 text-gray-600 placeholder-gray-400 text-sm font-light focus:outline-none focus:bg-gray-100 transition-colors"
+                className="w-full p-3 bg-gray-50 border-0 text-gray-600 placeholder-gray-400 text-[16px] font-light focus:outline-none focus:bg-gray-100 transition-colors"
               />
               {errors?.password && (
                 <p className="flex items-center text-sm font-medium leading-5 text-red-500">

@@ -53,8 +53,8 @@ export default function Home(props: Route.ComponentProps) {
 
   return (
     <div className="flex flex-1 flex-col md:mx-auto md:w-[720px]">
-      <header className="mb-12 flex items-center justify-between">
-        <h1 className="font-sans font-thin text-5xl dark:text-zinc-100">
+      <header className="mb-12 flex items-center justify-between px-1.5">
+        <h1 className="font-sans tracking-wide font-light text-4xl dark:text-zinc-100">
           Things
         </h1>
         <div className="flex justify-end">
@@ -75,7 +75,7 @@ export default function Home(props: Route.ComponentProps) {
               name="description"
               placeholder="Create a new todo..."
               required
-              className="flex-1 border border-zinc-300 rounded-md text-[16px] px-3 py-2 text-sm text-zinc-900 dark:border-zinc-600 dark:bg-slate-800 dark:text-zinc-400"
+              className="w-full p-3 bg-gray-50 border border-zinc-200 text-gray-600 placeholder-gray-400 text-[16px] font-light focus:outline-none transition-colors"
             />
           </fieldset>
         </fetcher.Form>
