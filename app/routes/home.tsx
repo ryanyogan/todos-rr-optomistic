@@ -1,6 +1,7 @@
 import { useEffect, useRef } from "react";
 import { data, Form, Link, useFetcher, useSearchParams } from "react-router";
 import invariant from "tiny-invariant";
+import { ProfileMenu } from "~/components/profile-menu";
 import { ThemeSwitcher } from "~/components/theme-switcher";
 import { TodoActions } from "~/components/todo-actions";
 import { TodoList } from "~/components/todo-list";
@@ -52,10 +53,13 @@ export default function Home(props: Route.ComponentProps) {
 
   return (
     <div className="flex flex-1 flex-col md:mx-auto md:w-[720px]">
-      <header className="mb-12 flex items-center justify-center">
+      <header className="mb-12 flex items-center justify-between">
         <h1 className="font-sans font-thin text-5xl dark:text-zinc-100">
           Things
         </h1>
+        <div className="flex justify-end">
+          <ProfileMenu />
+        </div>
       </header>
 
       <main className="flex-1 space-y-4">
@@ -71,7 +75,7 @@ export default function Home(props: Route.ComponentProps) {
               name="description"
               placeholder="Create a new todo..."
               required
-              className="flex-1 rounded-md text-[16px] px-3 py-2 text-sm text-zinc-900 dark:border-zinc-600 dark:bg-slate-800 dark:text-zinc-400"
+              className="flex-1 border border-zinc-300 rounded-md text-[16px] px-3 py-2 text-sm text-zinc-900 dark:border-zinc-600 dark:bg-slate-800 dark:text-zinc-400"
             />
           </fieldset>
         </fetcher.Form>

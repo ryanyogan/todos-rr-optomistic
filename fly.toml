@@ -11,6 +11,9 @@ kill_timeout = 5
 [experimental]
 auto_rollback = true
 
+[env]
+DATABASE_URL = '/data/sqlite.db'
+
 [[services]]
 protocol = 'tcp'
 internal_port = 3000
@@ -48,3 +51,7 @@ tls_skip_verify = false
 cpu_kind = 'shared'
 cpus = 1
 memory_mb = 256
+
+[[mounts]]
+source = 'data'
+destination = '/data'

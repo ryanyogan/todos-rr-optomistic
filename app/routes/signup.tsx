@@ -107,7 +107,7 @@ export default function Signup(props: Route.ComponentProps) {
           <div className="flex justify-between items-center pt-4">
             <span className="text-xs text-gray-400">
               <Link
-                to="/login"
+                to="/signin"
                 className="hover:text-gray-600 transition-colors"
               >
                 Already have an account?

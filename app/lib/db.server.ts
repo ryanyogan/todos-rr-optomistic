@@ -8,7 +8,7 @@ import * as schema from "~/drizzle/schema";
 const sqlite = new Database(process.env.DATABASE_URL);
 export const db = drizzle(sqlite, { schema });
 
-void migrate(db, { migrationsFolder: "./app/drizzle/migrations" });
+void migrate(db, { migrationsFolder: "app/drizzle/migrations" });
 
 /**
  * List of todo items.
