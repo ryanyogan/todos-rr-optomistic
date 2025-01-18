@@ -9,16 +9,7 @@ import {
   PencilIcon,
   TrashIcon,
 } from "lucide-react";
-
-const dateFormatter = new Intl.DateTimeFormat("en-US", {
-  day: "numeric",
-  month: "short",
-  year: "numeric",
-  hour: "numeric",
-  minute: "numeric",
-  hour12: true,
-  timeZone: "UTC",
-});
+import { formatDate } from "~/lib/utils";
 
 export function TodoItem(props: { todo: Item }) {
   const fetcher = useFetcher();
@@ -104,17 +95,15 @@ export function TodoItem(props: { todo: Item }) {
             {completed ? (
               <p>
                 Completed at{" "}
-                <time dateTime={`${new Date(completedAt).toISOString()}`}>
-                  {dateFormatter.format(new Date(completedAt))}
+                <time dateTime={new Date(completedAt).toISOString()}>
+                  {formatDate(completedAt)}
                 </time>
               </p>
             ) : (
               <p>
-                Created at{" "}
-                <time
-                  dateTime={`${new Date(props.todo.createdAt).toISOString()}`}
-                >
-                  {dateFormatter.format(new Date(props.todo.createdAt))}
+                Created on{" "}
+                <time dateTime={new Date(props.todo.createdAt).toISOString()}>
+                  {formatDate(props.todo.createdAt)}
                 </time>
               </p>
             )}

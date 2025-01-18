@@ -1,8 +1,8 @@
 {
   "version": "6",
   "dialect": "sqlite",
-  "id": "110ab592-15b2-42eb-87be-04d62e12eedd",
-  "prevId": "a397f9ba-b054-442e-bbf0-f3bdd502e791",
+  "id": "2c6daf11-be1f-4cf3-8884-ba081f002f2a",
+  "prevId": "a6266ad5-7373-45bd-8038-ffa9726a3e15",
   "tables": {
     "passwords": {
       "name": "passwords",
@@ -25,18 +25,33 @@
           "name": "hash",
           "type": "text",
           "primaryKey": false,
-          "notNull": false,
+          "notNull": true,
           "autoincrement": false
         },
         "salt": {
           "name": "salt",
           "type": "text",
           "primaryKey": false,
-          "notNull": false,
+          "notNull": true,
           "autoincrement": false
         }
       },
-      "indexes": {},
+      "indexes": {
+        "passwords_user_id_unique": {
+          "name": "passwords_user_id_unique",
+          "columns": [
+            "user_id"
+          ],
+          "isUnique": true
+        },
+        "user_password_id_idx": {
+          "name": "user_password_id_idx",
+          "columns": [
+            "user_id"
+          ],
+          "isUnique": false
+        }
+      },
       "foreignKeys": {
         "passwords_user_id_users_id_fk": {
           "name": "passwords_user_id_users_id_fk",
@@ -48,7 +63,7 @@
           "columnsTo": [
             "id"
           ],
-          "onDelete": "no action",
+          "onDelete": "cascade",
           "onUpdate": "no action"
         }
       },
@@ -86,19 +101,19 @@
           "primaryKey": false,
           "notNull": true,
           "autoincrement": false,
-          "default": 0
+          "default": "0"
         },
         "created_at": {
           "name": "created_at",
-          "type": "integer",
+          "type": "text",
           "primaryKey": false,
           "notNull": true,
           "autoincrement": false,
-          "default": "strftime('%s', 'now')"
+          "default": "(CURRENT_TIMESTAMP)"
         },
         "completed_at": {
           "name": "completed_at",
-          "type": "integer",
+          "type": "text",
           "primaryKey": false,
           "notNull": false,
           "autoincrement": false
@@ -109,10 +124,25 @@
           "primaryKey": false,
           "notNull": true,
           "autoincrement": false,
-          "default": 0
+          "default": "0"
         }
       },
-      "indexes": {},
+      "indexes": {
+        "user_id_idx": {
+          "name": "user_id_idx",
+          "columns": [
+            "user_id"
+          ],
+          "isUnique": false
+        },
+        "completed_idx": {
+          "name": "completed_idx",
+          "columns": [
+            "completed"
+          ],
+          "isUnique": false
+        }
+      },
       "foreignKeys": {
         "tasks_user_id_users_id_fk": {
           "name": "tasks_user_id_users_id_fk",
@@ -124,7 +154,7 @@
           "columnsTo": [
             "id"
           ],
-          "onDelete": "no action",
+          "onDelete": "cascade",
           "onUpdate": "no action"
         }
       },
@@ -158,11 +188,11 @@
         },
         "created_at": {
           "name": "created_at",
-          "type": "integer",
+          "type": "text",
           "primaryKey": false,
           "notNull": true,
           "autoincrement": false,
-          "default": "strftime('%s', 'now')"
+          "default": "(CURRENT_TIMESTAMP)"
         },
         "forgot_password_token": {
           "name": "forgot_password_token",
@@ -186,6 +216,13 @@
             "email"
           ],
           "isUnique": true
+        },
+        "email_idx": {
+          "name": "email_idx",
+          "columns": [
+            "email"
+          ],
+          "isUnique": false
         }
       },
       "foreignKeys": {},
@@ -198,9 +235,7 @@
   "enums": {},
   "_meta": {
     "schemas": {},
-    "tables": {
-      "\"password\"": "\"passwords\""
-    },
+    "tables": {},
     "columns": {}
   },
   "internal": {

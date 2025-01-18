@@ -1,49 +1,87 @@
 import { relations, sql } from "drizzle-orm";
-import { integer, sqliteTable, text } from "drizzle-orm/sqlite-core";
+import { index, integer, sqliteTable, text } from "drizzle-orm/sqlite-core";
 
-export const users = sqliteTable("users", {
+export const users = sqliteTable(
+  "users",
+  {
+    id: text("id")
+      .primaryKey()
+      .$defaultFn(() => crypto.randomUUID()),
+    email: text("email").unique().notNull(),
+    name: text("name").notNull(),
+    createdAt: text("created_at")
+      .notNull()
+      .default(sql`(CURRENT_TIMESTAMP)`),
+    forgotPasswordToken: text("forgot_password_token"),
+    forgotPasswordTokenExpiresAt: integer("forgot_password_token_expires_at"),
+  },
+  (table) => [index("email_idx").on(table.email)]
+);
+
+export const passwords = sqliteTable(
+  "passwords",
+  {
+    id: text("id")
+      .primaryKey()
+      .$defaultFn(() => crypto.randomUUID()),
+    userId: text("user_id")
+      .notNull()
+      .unique()
+      .references(() => users.id, { onDelete: "cascade" }),
+    hash: text("hash").notNull(),
+    salt: text("salt").notNull(),
+  },
+  (t) => [index("user_password_id_idx").on(t.userId)]
+);
+
+export const sessions = sqliteTable("sessions", {
   id: text("id")
     .primaryKey()
     .$defaultFn(() => crypto.randomUUID()),
-  email: text("email").unique().notNull(),
-  name: text("name").notNull(),
-  createdAt: integer("created_at", { mode: "timestamp" })
-    .notNull()
-    .default(sql`strftime('%s', 'now')`),
-  forgotPasswordToken: text("forgot_password_token"),
-  forgotPasswordTokenExpiresAt: integer("forgot_password_token_expires_at"),
+  data: text("data").notNull(),
+  expiresAt: integer("expires_at", { mode: "timestamp" }).notNull(),
 });
 
-export const passwords = sqliteTable("passwords", {
-  id: text("id")
-    .primaryKey()
-    .$defaultFn(() => crypto.randomUUID()),
-  userId: text("user_id")
-    .notNull()
-    .references(() => users.id),
-  hash: text("hash"),
-  salt: text("salt"),
-});
-
-export const tasks = sqliteTable("tasks", {
-  id: text("id")
-    .primaryKey()
-    .$defaultFn(() => crypto.randomUUID()),
-  userId: text("user_id")
-    .notNull()
-    .references(() => users.id),
-  description: text("description").notNull(),
-  completed: integer("completed").notNull().default(0),
-  createdAt: integer("created_at", { mode: "timestamp" })
-    .notNull()
-    .default(sql`strftime('%s', 'now')`),
-  completedAt: integer("completed_at", { mode: "timestamp" }),
-  editing: integer("editing").notNull().default(0),
-});
+export const tasks = sqliteTable(
+  "tasks",
+  {
+    id: text("id")
+      .primaryKey()
+      .$defaultFn(() => crypto.randomUUID()),
+    userId: text("user_id")
+      .notNull()
+      .references(() => users.id, { onDelete: "cascade" }),
+    description: text("description").notNull(),
+    completed: integer("completed", { mode: "boolean" })
+      .notNull()
+      .default(sql`0`),
+    createdAt: text("created_at")
+      .notNull()
+      .default(sql`(CURRENT_TIMESTAMP)`),
+    completedAt: text("completed_at"),
+    editing: integer("editing", { mode: "boolean" })
+      .notNull()
+      .default(sql`0`),
+  },
+  (table) => [
+    index("user_id_idx").on(table.userId),
+    index("completed_idx").on(table.completed),
+  ]
+);
 
 export const usersRelations = relations(users, ({ many, one }) => ({
   tasks: many(tasks),
-  password: one(passwords),
+  password: one(passwords, {
+    fields: [users.id],
+    references: [passwords.userId],
+  }),
+}));
+
+export const passwordsRelations = relations(passwords, ({ one }) => ({
+  user: one(users, {
+    fields: [passwords.userId],
+    references: [users.id],
+  }),
 }));
 
 export const tasksRelations = relations(tasks, ({ one }) => ({

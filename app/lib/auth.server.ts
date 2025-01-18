@@ -3,6 +3,36 @@ import { eq } from "drizzle-orm";
 import { passwords, users } from "~/drizzle/schema";
 import { db } from "./db.server";
 
+export async function authenticateUser(email: string, password: string) {
+  try {
+    const [user] = await db.query.users.findMany({
+      where: eq(users.email, email),
+      with: {
+        password: true,
+      },
+    });
+
+    if (!user || !user.password) {
+      return {
+        error: "Incorrect email or password",
+        data: null,
+      };
+    }
+
+    const hash = crypto
+      .pbkdf2Sync(password, user.password.salt, 100_000, 64, "sha512")
+      .toString("hex");
+
+    if (hash !== user.password.hash) {
+      return { error: "Incorrect email or password", data: null };
+    }
+
+    return { error: null, data: user.id.toString() };
+  } catch (error: any) {
+    return { error: `Error Occurred: ${error.message}`, data: null };
+  }
+}
+
 export async function createUser(
   name: string,
   email: string,
@@ -15,7 +45,7 @@ export async function createUser(
       .where(eq(users.email, email))
       .execute();
 
-    if (user) {
+    if (user.length > 0) {
       return {
         error: "The email addres is already taken",
         data: null,
@@ -45,9 +75,9 @@ export async function createUser(
       error: null,
       data: newUser.id.toString(),
     };
-  } catch (error) {
+  } catch (error: any) {
     return {
-      error: "An unexpected error occurred",
+      error: `Error Occurred: ${error?.message}`,
       data: null,
     };
   }
