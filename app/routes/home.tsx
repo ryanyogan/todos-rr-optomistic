@@ -1,12 +1,20 @@
+import { ListCheck } from "lucide-react";
 import { useEffect, useRef } from "react";
-import { data, Link, useFetcher, useSearchParams } from "react-router";
+import {
+  data,
+  Link,
+  redirect,
+  useFetcher,
+  useSearchParams,
+} from "react-router";
 import invariant from "tiny-invariant";
 import { ProfileMenu } from "~/components/profile-menu";
 import { StateSelector } from "~/components/state-selector";
 import { ThemeSwitcher } from "~/components/theme-switcher";
 import { TodoActions } from "~/components/todo-actions";
 import { TodoList } from "~/components/todo-list";
-import { todos } from "~/lib/db.server";
+import { getUser } from "~/lib/auth.server";
+import { destroySession, getSession } from "~/lib/session.server";
 import { executeHandler } from "~/lib/tasks";
 import { INTENTS, type View } from "~/types";
 import type { Route } from "./+types/home";
@@ -18,8 +26,27 @@ export function meta({}: Route.MetaArgs) {
   ];
 }
 
-export async function loader() {
-  return data({ tasks: await todos.read() });
+export async function loader(props: Route.LoaderArgs) {
+  const session = await getSession(props.request.headers.get("Cookie"));
+  if (!session.has("id")) {
+    throw redirect("/signin", {
+      headers: {
+        "Set-Cookie": await destroySession(session),
+      },
+    });
+  }
+
+  const userQuery = await getUser(session.get("id") as string);
+  if (userQuery.error || !userQuery.data) {
+    throw redirect("/signin");
+  }
+
+  return data({
+    id: userQuery.data.user.id.toString(),
+    name: userQuery.data.user.name,
+    email: userQuery.data.user.email,
+    tasks: userQuery.data.user.tasks,
+  });
 }
 
 export async function action(props: Route.ActionArgs) {
@@ -105,7 +132,12 @@ export default function Home(props: Route.ComponentProps) {
               <TodoList todos={data.tasks} view={view as View} />
             </ul>
           ) : (
-            <p className="text-center leading-7">No tasks available</p>
+            <div className="flex flex-col">
+              <ListCheck className="mx-auto w-16 h-16 text-slate-500 dark:text-slate-500" />
+              <p className="text-center font-serif text-lg font-light text-slate-500">
+                No tasks available
+              </p>
+            </div>
           )}
         </div>
 

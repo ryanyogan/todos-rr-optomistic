@@ -82,3 +82,24 @@ export async function createUser(
     };
   }
 }
+
+export async function getUser(id: string) {
+  try {
+    const userWithTasks = await db.query.users.findMany({
+      where: eq(users.id, id),
+      with: {
+        tasks: true,
+      },
+    });
+
+    if (userWithTasks.length === 0) {
+      return { error: "User not found", data: null };
+    }
+
+    const user = userWithTasks[0];
+
+    return { error: null, data: { user } };
+  } catch (error: any) {
+    return { error: `Error Occurred: ${error.message}`, data: null };
+  }
+}

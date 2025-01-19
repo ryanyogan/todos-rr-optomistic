@@ -1,9 +1,10 @@
 import { useMemo } from "react";
 import { useFetchers } from "react-router";
-import { INTENTS, type Item, type View } from "~/types";
+import type { Task } from "~/drizzle/schema";
+import { INTENTS, type View } from "~/types";
 import { TodoItem } from "./todo-item";
 
-export function TodoList(props: { todos: Item[]; view: View }) {
+export function TodoList(props: { todos: Task[]; view: View }) {
   const fetchers = useFetchers();
 
   const isDeleting = fetchers.some(

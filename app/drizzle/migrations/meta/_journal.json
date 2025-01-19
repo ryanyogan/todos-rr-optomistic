@@ -5,29 +5,8 @@
     {
       "idx": 0,
       "version": "6",
-      "when": 1737223115211,
-      "tag": "0000_huge_zombie",
-      "breakpoints": true
-    },
-    {
-      "idx": 1,
-      "version": "6",
-      "when": 1737223524475,
-      "tag": "0001_absent_butterfly",
-      "breakpoints": true
-    },
-    {
-      "idx": 2,
-      "version": "6",
-      "when": 1737224265157,
-      "tag": "0002_dry_ghost_rider",
-      "breakpoints": true
-    },
-    {
-      "idx": 3,
-      "version": "6",
-      "when": 1737307015555,
-      "tag": "0003_stiff_enchantress",
+      "when": 1737329466990,
+      "tag": "0000_late_brother_voodoo",
       "breakpoints": true
     }
   ]

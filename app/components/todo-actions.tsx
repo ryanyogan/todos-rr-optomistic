@@ -1,7 +1,8 @@
 import { useFetcher, useFetchers } from "react-router";
-import { INTENTS, type Item } from "~/types";
+import type { Task } from "~/drizzle/schema";
+import { INTENTS } from "~/types";
 
-export function TodoActions(props: { tasks: Item[] }) {
+export function TodoActions(props: { tasks: Task[] }) {
   const fetcher = useFetcher();
   const fetchers = useFetchers();
 
