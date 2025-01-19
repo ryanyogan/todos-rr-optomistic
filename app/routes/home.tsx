@@ -84,22 +84,19 @@ export default function Home(props: Route.ComponentProps) {
               name="description"
               placeholder="Create a new todo..."
               required
-              className="w-full rounded-md p-3 bg-gray-100 dark:bg-slate-700 border border-zinc-200 dark:border-slate-600 text-gray-600 dark:text-slate-200 placeholder-gray-400 text-[16px] font-light focus:outline-none transition-colors"
+              className="w-full rounded-md p-3 bg-white dark:bg-slate-700 border border-slate-200 dark:border-slate-600 text-gray-800 dark:text-slate-200 placeholder:text-slate-500 placeholder:dark:text-slate-400 text-[16px] font-light focus:outline-none transition-colors"
             />
           </fieldset>
         </fetcher.Form>
 
-        <div className="w-full px-2 py-2">
-          <div className="w-full bg-slate-200 dark:bg-slate-700 rounded-full h-2">
+        <div className="px-2 py-2 flex items-center gap-x-4">
+          <StateSelector />
+          <div className="w-full bg-slate-200 dark:bg-slate-700 rounded-full h-4">
             <div
-              className="dark:bg-sky-400 bg-slate-300 h-2 rounded-full"
+              className="dark:bg-sky-500 bg-green-500 h-4 rounded-full"
               style={{ width: `${percentComplete}%` }}
             ></div>
           </div>
-        </div>
-
-        <div className="px-2 py-2 flex">
-          <StateSelector />
         </div>
 
         <div className="px-2 py-2">
