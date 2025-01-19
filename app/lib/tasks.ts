@@ -35,7 +35,7 @@ export async function handleToggleCompletion(formData: FormData) {
   const completed = formData.get("completed") as string;
   await todos.update(id, {
     completed: !JSON.parse(completed),
-    completedAt: !JSON.parse(completed) ? new Date() : undefined,
+    completedAt: !JSON.parse(completed) ? new Date().toISOString() : undefined,
   });
 }
 

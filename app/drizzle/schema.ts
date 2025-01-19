@@ -11,7 +11,7 @@ export const users = sqliteTable(
     name: text("name").notNull(),
     createdAt: text("created_at")
       .notNull()
-      .default(sql`(CURRENT_TIMESTAMP)`),
+      .default(sql`(strftime('%Y-%m-%dT%H:%M:%S', 'now'))`),
     forgotPasswordToken: text("forgot_password_token"),
     forgotPasswordTokenExpiresAt: integer("forgot_password_token_expires_at"),
   },
@@ -57,7 +57,7 @@ export const tasks = sqliteTable(
       .default(sql`0`),
     createdAt: text("created_at")
       .notNull()
-      .default(sql`(CURRENT_TIMESTAMP)`),
+      .default(sql`(strftime('%Y-%m-%dT%H:%M:%S', 'now'))`),
     completedAt: text("completed_at"),
     editing: integer("editing", { mode: "boolean" })
       .notNull()

@@ -22,6 +22,13 @@
       "when": 1737224265157,
       "tag": "0002_dry_ghost_rider",
       "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "6",
+      "when": 1737307015555,
+      "tag": "0003_stiff_enchantress",
+      "breakpoints": true
     }
   ]
 }

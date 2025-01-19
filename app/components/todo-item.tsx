@@ -1,4 +1,3 @@
-import { format } from "date-fns";
 import { useEffect, useState } from "react";
 import { useFetcher, useFetchers } from "react-router";
 import { INTENTS, type Item } from "~/types";
@@ -10,6 +9,7 @@ import {
   PencilIcon,
   TrashIcon,
 } from "lucide-react";
+import { formatDate } from "~/lib/dates";
 
 export function TodoItem(props: { todo: Item }) {
   const fetcher = useFetcher();
@@ -52,7 +52,7 @@ export function TodoItem(props: { todo: Item }) {
 
   const completedAt =
     isToggleCompletion || !props.todo.completedAt
-      ? new Date()
+      ? new Date().toISOString()
       : props.todo.completedAt;
 
   const description = isSaving
@@ -97,12 +97,11 @@ export function TodoItem(props: { todo: Item }) {
           <p className="dark:text-zinc-200 text-zinc-700">{description}</p>
           <div className="text-xs text-zinc-500">
             {completed ? (
-              <p>Completed on {format(completedAt, "MMMM d, yyyy, h:mm a")}</p>
+              <>
+                <p>Completed on {formatDate(completedAt)}</p>
+              </>
             ) : (
-              <p>
-                Created on{" "}
-                {format(props.todo.createdAt, "MMMM d, yyyy, h:mm a")}
-              </p>
+              <p>Created on {formatDate(props.todo.createdAt)}</p>
             )}
           </div>
         </div>
