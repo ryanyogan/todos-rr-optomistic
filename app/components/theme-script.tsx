@@ -36,6 +36,7 @@ export function ThemeScript() {
         const syncTheme = (media: MediaQueryList | MediaQueryListEvent) => {
           document.documentElement.classList.toggle("dark", media.matches);
         };
+
         const media = window.matchMedia("(prefers-color-scheme: dark)");
         syncTheme(media);
         media.addEventListener("change", syncTheme);
