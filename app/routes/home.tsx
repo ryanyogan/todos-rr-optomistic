@@ -1,7 +1,8 @@
 import { useEffect, useRef } from "react";
-import { data, Form, Link, useFetcher, useSearchParams } from "react-router";
+import { data, Link, useFetcher, useSearchParams } from "react-router";
 import invariant from "tiny-invariant";
 import { ProfileMenu } from "~/components/profile-menu";
+import { StateSelector } from "~/components/state-selector";
 import { ThemeSwitcher } from "~/components/theme-switcher";
 import { TodoActions } from "~/components/todo-actions";
 import { TodoList } from "~/components/todo-list";
@@ -51,13 +52,21 @@ export default function Home(props: Route.ComponentProps) {
     }
   }, [isAdding]);
 
+  const completedTasks = data.tasks.filter((task) => task.completed).length;
+  const totalTasks = data.tasks.length;
+  const percentComplete =
+    totalTasks > 0 ? (completedTasks / totalTasks) * 100 : 0;
+
   return (
     <div className="flex flex-1 flex-col md:mx-auto md:w-[720px]">
       <header className="mb-12 flex items-center justify-between px-1.5">
-        <h1 className="font-sans tracking-wide font-light text-4xl dark:text-zinc-100">
-          Things
-        </h1>
-        <div className="flex justify-end">
+        <Link to="/">
+          <h1 className="font-serif tracking-wide font-light text-4xl dark:text-zinc-100">
+            Things
+          </h1>
+        </Link>
+        <div className="flex justify-between gap-4">
+          <ThemeSwitcher />
           <ProfileMenu />
         </div>
       </header>
@@ -75,49 +84,25 @@ export default function Home(props: Route.ComponentProps) {
               name="description"
               placeholder="Create a new todo..."
               required
-              className="w-full p-3 bg-gray-50 border border-zinc-200 text-gray-600 placeholder-gray-400 text-[16px] font-light focus:outline-none transition-colors"
+              className="w-full rounded-md p-3 bg-gray-100 border border-zinc-200 text-gray-600 placeholder-gray-400 text-[16px] font-light focus:outline-none transition-colors"
             />
           </fieldset>
         </fetcher.Form>
 
-        <div className="px-4 py-2">
-          <Form className="flex items-center justify-center gap-12 text-sm dark:text-sky-400">
-            <button
-              name="view"
-              value="all"
-              aria-label="View all tasks"
-              className={`transition ${
-                view === "all" ? "font-bold" : "opacity-50 hover:opacity-100"
-              }`}
-            >
-              All
-            </button>
-            <button
-              name="view"
-              value="active"
-              aria-label="View active tasks"
-              className={`transition ${
-                view === "active" ? "font-bold" : "opacity-50 hover:opacity-100"
-              }`}
-            >
-              Active
-            </button>
-            <button
-              name="view"
-              value="completed"
-              aria-label="View completed"
-              className={`transition ${
-                view === "completed"
-                  ? "font-bold"
-                  : "opacity-50 hover:opacity-100"
-              }`}
-            >
-              Completed
-            </button>
-          </Form>
+        <div className="w-full px-2 py-2">
+          <div className="w-full bg-slate-200 rounded-full h-2">
+            <div
+              className="bg-green-400 h-2 rounded-full"
+              style={{ width: `${percentComplete}%` }}
+            ></div>
+          </div>
         </div>
 
-        <div className="px-4 py-2">
+        <div className="px-2 py-2 flex">
+          <StateSelector />
+        </div>
+
+        <div className="px-2 py-2">
           {data.tasks.length > 0 ? (
             <ul>
               <TodoList todos={data.tasks} view={view as View} />
@@ -127,12 +112,8 @@ export default function Home(props: Route.ComponentProps) {
           )}
         </div>
 
-        <div className="px-4 py-2">
+        <div className="px-2 py-2">
           <TodoActions tasks={data.tasks} />
-        </div>
-
-        <div className="w-full flex justify-center p-8">
-          <ThemeSwitcher />
         </div>
       </main>
 
