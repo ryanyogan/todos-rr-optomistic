@@ -78,12 +78,12 @@ export function TodoItem(props: { todo: Item }) {
           disabled={editing || actionInProgress}
           name="intent"
           value={INTENTS.toggleCompletion}
-          className="rounded-full border border-gray-200 p-1 transition hover:bg-gray-200 disabled:pointer-events-none disabled:opacity-25 dark:border-gray-700 dark:hover:bg-gray-700"
+          className="rounded-full border border-gray-200 p-1.5 transition hover:bg-gray-200 disabled:pointer-events-none disabled:opacity-25 dark:border-gray-700 dark:hover:bg-gray-700"
         >
           {completed ? (
-            <CheckCircleIcon className="size-3 text-sky-400" />
+            <CheckCircleIcon className="size-3 text-sky-500" />
           ) : (
-            <CircleIcon className="size-3 text-gray-400" />
+            <CircleIcon className="size-3 text-zinc-300" />
           )}
         </button>
       </fetcher.Form>
@@ -94,8 +94,10 @@ export function TodoItem(props: { todo: Item }) {
             completed || actionInProgress ? "opacity-25 dark:opacity-40" : ""
           }`}
         >
-          <p className="dark:text-zinc-200 text-zinc-700">{description}</p>
-          <div className="text-xs text-zinc-500">
+          <p className="dark:text-zinc-200 text-zinc-700 text-lg">
+            {description}
+          </p>
+          <div className="text-xs text-slate-400 dark:text-slate-500">
             {completed ? (
               <>
                 <p>Completed on {formatDate(completedAt)}</p>
@@ -141,7 +143,7 @@ export function TodoItem(props: { todo: Item }) {
               name="description"
               defaultValue={description}
               required
-              className="flex-1 rounded-full border-2 px-3 py-2 text-sm text-black"
+              className="w-full rounded-md p-2 bg-gray-100 dark:bg-slate-700 border border-zinc-200 dark:border-slate-600 text-gray-600 dark:text-slate-200 placeholder-gray-400 text-[16px] font-light focus:outline-none transition-colors"
             />
             <button
               aria-label="SAVE_TASK"
@@ -159,7 +161,7 @@ export function TodoItem(props: { todo: Item }) {
             disabled={completed || actionInProgress}
             name="intent"
             value={INTENTS.editTask}
-            className="rounded-full border border-gray-200 p-1 transition dark:text-gray-400 hover:bg-gray-200 disabled:pointer-events-none disabled:opacity-25 dark:border-gray-700 dark:hover:bg-gray-700"
+            className="rounded-full border border-gray-200 p-1.5 transition dark:text-gray-400 hover:bg-gray-200 disabled:pointer-events-none disabled:opacity-25 dark:border-gray-700 dark:hover:bg-gray-700"
           >
             <PencilIcon className="size-3" />
           </button>
@@ -169,7 +171,7 @@ export function TodoItem(props: { todo: Item }) {
           disabled={completed || editing || actionInProgress}
           name="intent"
           value={INTENTS.deleteTask}
-          className="rounded-full border border-gray-200 p-1 transition dark:text-gray-400 hover:bg-gray-200 disabled:pointer-events-none disabled:opacity-25 dark:border-gray-700 dark:hover:bg-gray-700"
+          className="rounded-full border border-gray-200 p-1.5 transition dark:text-gray-400 hover:bg-gray-200 disabled:pointer-events-none disabled:opacity-25 dark:border-gray-700 dark:hover:bg-gray-700"
         >
           <TrashIcon className="size-3" />
         </button>

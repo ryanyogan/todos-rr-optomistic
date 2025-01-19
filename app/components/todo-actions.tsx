@@ -100,7 +100,7 @@ export function TodoActions(props: { tasks: Item[] }) {
           }
           name="intent"
           value={INTENTS.clearCompleted}
-          className="text-zinc-500 dark:text-sky-600 bg-zinc-100 border border-zinc-200 px-2 py-1 rounded-md text-xs transition disabled:pointer-events-none disabled:opacity-25"
+          className="text-zinc-500 dark:text-sky-400 underline underline-offset-2 text-xs transition disabled:pointer-events-none disabled:opacity-25"
         >
           {isClearingCompleted ? "Clearing..." : "Clear Completed"}
         </button>
@@ -108,7 +108,7 @@ export function TodoActions(props: { tasks: Item[] }) {
           disabled={tasks.length === 0 || isDeletingAll}
           name="intent"
           value={INTENTS.deleteAll}
-          className="text-zinc-700 dark:text-sky-600 bg-red-100 border border-zinc-200 px-2 py-1 rounded-md text-xs transition disabled:pointer-events-none disabled:opacity-25"
+          className="text-zinc-500 dark:text-sky-400 underline underline-offset-2 text-xs transition disabled:pointer-events-none disabled:opacity-25"
         >
           {isDeletingAll ? "Deleting..." : "Delete All"}
         </button>

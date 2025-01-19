@@ -21,7 +21,7 @@ export function ProfileMenu() {
         aria-haspopup="menu"
         aria-label="Open profile menu"
         tabIndex={0}
-        className="flex items-center justify-center rounded-full border border-gray-200 bg-gray-50 px-4 py-2 transition hover:border-gray-500 group-open:before:fixed group-open:before:inset-0 group-open:before:cursor-auto dark:border-gray-700 dark:bg-gray-900 [&::-webkit-details-marker]:hidden"
+        className="flex rounded-md dark:text-zinc-300 items-center justify-between border border-gray-200 bg-gray-50 px-4 py-2 transition hover:border-gray-500 group-open:before:fixed group-open:before:inset-0 group-open:before:cursor-auto dark:border-gray-700 dark:bg-slate-800 [&::-webkit-details-marker]:hidden"
       >
         {name[0].toUpperCase()}
       </summary>

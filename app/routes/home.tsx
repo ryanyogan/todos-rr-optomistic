@@ -59,13 +59,13 @@ export default function Home(props: Route.ComponentProps) {
 
   return (
     <div className="flex flex-1 flex-col md:mx-auto md:w-[720px]">
-      <header className="mb-12 flex items-center justify-between px-1.5">
+      <header className="mb-12 flex items-center justify-between px-2">
         <Link to="/">
-          <h1 className="font-serif tracking-wide font-light text-4xl dark:text-zinc-100">
+          <h1 className="font-serif tracking-wide font-light text-5xl dark:text-zinc-100">
             Things
           </h1>
         </Link>
-        <div className="flex justify-between gap-4">
+        <div className="flex justify-between gap-x-4">
           <ThemeSwitcher />
           <ProfileMenu />
         </div>
@@ -84,15 +84,15 @@ export default function Home(props: Route.ComponentProps) {
               name="description"
               placeholder="Create a new todo..."
               required
-              className="w-full rounded-md p-3 bg-gray-100 border border-zinc-200 text-gray-600 placeholder-gray-400 text-[16px] font-light focus:outline-none transition-colors"
+              className="w-full rounded-md p-3 bg-gray-100 dark:bg-slate-700 border border-zinc-200 dark:border-slate-600 text-gray-600 dark:text-slate-200 placeholder-gray-400 text-[16px] font-light focus:outline-none transition-colors"
             />
           </fieldset>
         </fetcher.Form>
 
         <div className="w-full px-2 py-2">
-          <div className="w-full bg-slate-200 rounded-full h-2">
+          <div className="w-full bg-slate-200 dark:bg-slate-700 rounded-full h-2">
             <div
-              className="bg-green-400 h-2 rounded-full"
+              className="dark:bg-sky-400 bg-slate-300 h-2 rounded-full"
               style={{ width: `${percentComplete}%` }}
             ></div>
           </div>
