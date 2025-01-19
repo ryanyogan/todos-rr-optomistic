@@ -78,12 +78,12 @@ export function TodoItem(props: { todo: Item }) {
           disabled={editing || actionInProgress}
           name="intent"
           value={INTENTS.toggleCompletion}
-          className="rounded-full border border-gray-200 p-1.5 transition hover:bg-gray-200 disabled:pointer-events-none disabled:opacity-25 dark:border-gray-700 dark:hover:bg-gray-700"
+          className="p-1"
         >
           {completed ? (
-            <CheckCircleIcon className="size-3 text-sky-500" />
+            <CheckCircleIcon className="size-4 text-sky-500" />
           ) : (
-            <CircleIcon className="size-3 text-zinc-300" />
+            <CircleIcon className="size-4 text-slate-300" />
           )}
         </button>
       </fetcher.Form>
