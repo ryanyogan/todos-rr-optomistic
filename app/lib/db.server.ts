@@ -24,7 +24,7 @@ export const todos: Todo = {
       id: Math.random().toString(16).slice(2),
       description,
       completed: false,
-      createdAt: new Date(),
+      createdAt: new Date().toISOString(),
     };
 
     items.push(createdTodo);

@@ -2,8 +2,8 @@ export interface Item {
   id: string;
   description: string;
   completed: boolean;
-  createdAt: Date;
-  completedAt?: Date;
+  createdAt: string;
+  completedAt?: string;
   editing?: boolean;
 }
 

@@ -1,4 +1,5 @@
-import { useState } from "react";
+import { format } from "date-fns";
+import { useEffect, useState } from "react";
 import { useFetcher, useFetchers } from "react-router";
 import { INTENTS, type Item } from "~/types";
 import { SaveIcon } from "./icons";
@@ -9,15 +10,18 @@ import {
   PencilIcon,
   TrashIcon,
 } from "lucide-react";
-import { formatDate } from "~/lib/utils";
 
 export function TodoItem(props: { todo: Item }) {
   const fetcher = useFetcher();
   const fetchers = useFetchers();
   const [isEditing, setIsEditing] = useState(false);
+  const [isClient, setIsClient] = useState(false);
 
-  const editing =
-    typeof document !== "undefined" ? isEditing : props.todo.editing;
+  useEffect(() => {
+    setIsClient(true);
+  }, []);
+
+  const editing = isClient ? isEditing : props.todo.editing;
 
   const isClearingCompleted = fetchers.some(
     (fetcher) =>
@@ -93,18 +97,11 @@ export function TodoItem(props: { todo: Item }) {
           <p className="dark:text-zinc-200 text-zinc-700">{description}</p>
           <div className="text-xs text-zinc-500">
             {completed ? (
-              <p>
-                Completed at{" "}
-                <time dateTime={new Date(completedAt).toISOString()}>
-                  {formatDate(completedAt)}
-                </time>
-              </p>
+              <p>Completed on {format(completedAt, "MMMM d, yyyy, h:mm a")}</p>
             ) : (
               <p>
                 Created on{" "}
-                <time dateTime={new Date(props.todo.createdAt).toISOString()}>
-                  {formatDate(props.todo.createdAt)}
-                </time>
+                {format(props.todo.createdAt, "MMMM d, yyyy, h:mm a")}
               </p>
             )}
           </div>
