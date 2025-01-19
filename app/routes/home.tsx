@@ -75,7 +75,7 @@ export default function Home(props: Route.ComponentProps) {
         <fetcher.Form ref={addFormRef} method="post" className="">
           <fieldset
             disabled={isAdding}
-            className="flex items-center gap-2 p-2 text-sm disabled:pointer-events-none disabled:opacity-25"
+            className="flex items-center gap-2 p-2 text-sm disabled:pointer-events-none"
           >
             <input type="hidden" name="intent" value={INTENTS.createTask} />
             <input
