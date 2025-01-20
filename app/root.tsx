@@ -26,7 +26,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
   return (
     <html
       lang="en"
-      className={`min-h-screen font-system antialiased  ${theme}`}
+      className={`min-h-screen font-system antialiased bg-rose-50 dark:bg-slate-900 transition-colors ${theme}`}
     >
       <head>
         <ThemeScript />
@@ -35,7 +35,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
         <Meta />
         <Links />
       </head>
-      <body className="max-w-2xl mx-auto p-4 sm:p-6 lg:p-8 bg-gradient-to-br from-rose-50 to-teal-50 dark:from-slate-900 dark:to-slate-800 transition-colors duration-500 ">
+      <body className="max-w-2xl mx-auto p-4 sm:p-6 lg:p-8">
         {children}
         <ScrollRestoration />
         <Scripts />

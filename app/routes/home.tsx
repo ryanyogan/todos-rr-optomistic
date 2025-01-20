@@ -159,6 +159,7 @@ export default function Home(props: Route.ComponentProps) {
           <ProfileMenu />
         </div>
       </div>
+
       <motion.div
         className="h-1 mb-6 rounded-full bg-slate-200 dark:bg-slate-700 overflow-hidden"
         initial={{ opacity: 0, y: -10 }}
@@ -194,7 +195,11 @@ export default function Home(props: Route.ComponentProps) {
         <TodoActions tasks={data.tasks} />
       </div>
 
-      <fetcher.Form ref={addFormRef} method="post" className="relative mb-6">
+      <fetcher.Form
+        ref={addFormRef}
+        method="post"
+        className="relative mb-6 py-4"
+      >
         <input type="hidden" name="intent" value={INTENTS.createTask} />
         <input
           ref={addInputRef}
