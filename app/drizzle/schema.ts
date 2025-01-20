@@ -18,21 +18,17 @@ export const users = sqliteTable(
   (table) => [index("email_idx").on(table.email)]
 );
 
-export const passwords = sqliteTable(
-  "passwords",
-  {
-    id: text("id")
-      .primaryKey()
-      .$defaultFn(() => crypto.randomUUID()),
-    userId: text("user_id")
-      .notNull()
-      .unique()
-      .references(() => users.id),
-    hash: text("hash").notNull(),
-    salt: text("salt").notNull(),
-  },
-  (t) => [index("user_password_id_idx").on(t.userId)]
-);
+export const passwords = sqliteTable("passwords", {
+  id: text("id")
+    .primaryKey()
+    .$defaultFn(() => crypto.randomUUID()),
+  userId: text("user_id")
+    .notNull()
+    .unique()
+    .references(() => users.id, { onDelete: "cascade" }),
+  hash: text("hash").notNull(),
+  salt: text("salt").notNull(),
+});
 
 export const sessions = sqliteTable("sessions", {
   id: text("id")
