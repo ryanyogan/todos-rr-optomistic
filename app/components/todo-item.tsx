@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useFetcher, useFetchers } from "react-router";
-import { INTENTS, type Item } from "~/types";
+import { INTENTS } from "~/types";
 import { SaveIcon } from "./icons";
 
 import {
@@ -9,9 +9,10 @@ import {
   PencilIcon,
   TrashIcon,
 } from "lucide-react";
+import type { Task } from "~/drizzle/schema";
 import { formatDate } from "~/lib/dates";
 
-export function TodoItem(props: { todo: Item }) {
+export function TodoItem(props: { todo: Task }) {
   const fetcher = useFetcher();
   const fetchers = useFetchers();
   const [isEditing, setIsEditing] = useState(false);
