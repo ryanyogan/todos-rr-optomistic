@@ -84,7 +84,7 @@ export function TodoItem(props: { todo: Task }) {
           {completed ? (
             <CheckCircleIcon className="size-4 text-sky-500" />
           ) : (
-            <CircleIcon className="size-4 text-slate-300" />
+            <CircleIcon className="size-4 text-slate-300 dark:text-slate-500" />
           )}
         </button>
       </fetcher.Form>
