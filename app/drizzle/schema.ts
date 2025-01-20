@@ -27,7 +27,7 @@ export const passwords = sqliteTable(
     userId: text("user_id")
       .notNull()
       .unique()
-      .references(() => users.id, { onDelete: "cascade" }),
+      .references(() => users.id),
     hash: text("hash").notNull(),
     salt: text("salt").notNull(),
   },
