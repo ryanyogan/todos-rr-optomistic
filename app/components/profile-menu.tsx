@@ -9,10 +9,8 @@ export function ProfileMenu() {
 
   const detailsRef = useRef<HTMLDetailsElement>(null);
 
-  // const name = indexLoaderData?.name as string;
-  // const email = indexLoaderData?.email as string;
-  const name = "John Doe";
-  const email = "joe@doe.com";
+  const name = indexLoaderData?.name as string;
+  const email = indexLoaderData?.email as string;
 
   return (
     <details ref={detailsRef} className="group relative cursor-pointer">
@@ -35,7 +33,7 @@ export function ProfileMenu() {
           role="presentation"
           className="cursor-default border-b border-gray-200 px-4 py-2 dark:border-gray-700"
         >
-          <p className="dark:text-slate-500">{name}</p>
+          <p className="dark:text-slate-300">{name}</p>
           <p className="text-gray-600 dark:text-slate-500">{email}</p>
         </div>
         <Form

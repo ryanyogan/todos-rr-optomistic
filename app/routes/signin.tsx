@@ -50,7 +50,9 @@ export default function SignIn(props: Route.ComponentProps) {
   return (
     <div className="h-[calc(100dvh-100px)] w-full flex flex-col items-center justify-center">
       <div className="w-full max-w-md">
-        <h1 className="text-4xl font-extralight text-center mb-12">Sign In</h1>
+        <h1 className="text-4xl font-extralight text-center mb-12 text-slate-800 dark:text-slate-200">
+          Sign In
+        </h1>
 
         <Form method="post" className="space-y-6">
           <fieldset disabled={isSubmitting}>
@@ -63,7 +65,7 @@ export default function SignIn(props: Route.ComponentProps) {
                 type="email"
                 required
                 placeholder="Enter your email..."
-                className="w-full p-3 bg-gray-50 border-0 text-gray-600 placeholder-gray-400 text-[16px] font-light focus:outline-none focus:bg-gray-100 transition-colors"
+                className="w-full rounded-md p-3 bg-white dark:bg-slate-700 border border-slate-200 dark:border-slate-600 text-gray-800 dark:text-slate-200 placeholder:text-slate-500 placeholder:dark:text-slate-400 text-[16px] font-light focus:outline-none transition-colors"
               />
               {errors?.email && (
                 <p className="flex items-center text-sm font-medium leading-5 text-red-500">
@@ -82,7 +84,7 @@ export default function SignIn(props: Route.ComponentProps) {
                 required
                 autoComplete="new-password"
                 placeholder="Enter your password..."
-                className="w-full p-3 bg-gray-50 border-0 text-gray-600 placeholder-gray-400 text-[16px] font-light focus:outline-none focus:bg-gray-100 transition-colors"
+                className="w-full rounded-md p-3 bg-white dark:bg-slate-700 border border-slate-200 dark:border-slate-600 text-gray-800 dark:text-slate-200 placeholder:text-slate-500 placeholder:dark:text-slate-400 text-[16px] font-light focus:outline-none transition-colors"
               />
               {errors?.password && (
                 <p className="flex items-center text-sm font-medium leading-5 text-red-500">
@@ -104,7 +106,7 @@ export default function SignIn(props: Route.ComponentProps) {
 
             <button
               type="submit"
-              className="px-6 py-2 bg-gray-50 text-gray-600 text-sm font-light hover:bg-gray-100 transition-colors focus:outline-none focus:bg-gray-100"
+              className="px-6 py-2 bg-gray-50 dark:bg-slate-700 text-gray-600 dark:text-slate-200 rounded-md text-sm font-light hover:bg-gray-100 hover:dark:bg-gray-600 transition-colors focus:outline-none"
             >
               {isSubmitting ? (
                 <>
