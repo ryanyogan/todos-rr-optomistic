@@ -1,6 +1,7 @@
 import { useFetcher, useFetchers } from "react-router";
 import { INTENTS } from "~/types";
 
+import { format } from "date-fns";
 import { motion } from "framer-motion";
 import { Check, Trash2 } from "lucide-react";
 import type { Task } from "~/drizzle/schema";
@@ -85,8 +86,8 @@ export function TodoItem(props: { todo: Task }) {
         </p>
         <p className="text-xs text-slate-400 dark:text-slate-500 mt-1">
           {completed
-            ? `Completed ${completedAt}`
-            : `Created ${props.todo.createdAt}`}
+            ? `Completed ${format(completedAt, "MMM d, yyyy")}`
+            : `Created ${format(props.todo.createdAt, "MMM d, yyyy")}`}
         </p>
       </div>
       <div className="flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
