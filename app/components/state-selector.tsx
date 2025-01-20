@@ -28,7 +28,7 @@ export function StateSelector() {
         onSubmit={() => {
           detailsRef.current?.removeAttribute("open");
         }}
-        className="absolute left-0 top-full z-50 mt-2 w-36 overflow-hidden rounded-3xl border border-gray-200 bg-gray-50 py-1 text-sm font-semibold shadow-lg ring-1 ring-slate-900/10 dark:border-gray-700 dark:bg-gray-900 dark:ring-0"
+        className="absolute left-0 top-full z-50 mt-2 w-36 overflow-hidden dark:text-slate-400 rounded-md border border-gray-200 bg-gray-50 py-1 text-sm font-semibold shadow-lg ring-1 ring-slate-900/10 dark:border-gray-700 dark:bg-gray-800 dark:ring-0"
       >
         {[{ name: "all" }, { name: "active" }, { name: "completed" }].map(
           (option) => (
@@ -39,7 +39,7 @@ export function StateSelector() {
               name="view"
               value={option.name}
               className={`flex w-full items-center px-4 py-2 transition hover:bg-gray-200 dark:hover:bg-gray-700 ${
-                option.name === view ? "text-sky-500 dark:text-red-500" : ""
+                option.name === view ? "text-sky-500 dark:text-sky-300" : ""
               }`}
             >
               {option.name.replace(/^./, (c) => c.toUpperCase())}

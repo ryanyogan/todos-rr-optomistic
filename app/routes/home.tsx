@@ -161,6 +161,16 @@ export default function Home(props: Route.ComponentProps) {
       </header>
 
       <main className="flex-1 space-y-4">
+        <div className="px-2 py-2 flex items-center gap-x-4">
+          <StateSelector />
+          <div className="w-full bg-slate-200 dark:bg-slate-700 rounded-full h-2">
+            <div
+              className="dark:bg-sky-500 bg-green-500 h-2 rounded-full"
+              style={{ width: `${percentComplete}%` }}
+            ></div>
+          </div>
+        </div>
+
         <fetcher.Form ref={addFormRef} method="post" className="">
           <fieldset
             disabled={isAdding}
@@ -177,16 +187,6 @@ export default function Home(props: Route.ComponentProps) {
             />
           </fieldset>
         </fetcher.Form>
-
-        <div className="px-2 py-2 flex items-center gap-x-4">
-          <StateSelector />
-          <div className="w-full bg-slate-200 dark:bg-slate-700 rounded-full h-4">
-            <div
-              className="dark:bg-sky-500 bg-green-500 h-4 rounded-full"
-              style={{ width: `${percentComplete}%` }}
-            ></div>
-          </div>
-        </div>
 
         <div className="px-2 py-2">
           {data.tasks.length > 0 ? (
