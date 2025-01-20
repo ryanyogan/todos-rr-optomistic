@@ -165,7 +165,7 @@ export default function Home(props: Route.ComponentProps) {
           <StateSelector />
           <div className="w-full bg-slate-200 dark:bg-slate-700 rounded-full h-2">
             <div
-              className="dark:bg-sky-500 bg-green-500 h-2 rounded-full"
+              className="dark:bg-blue-500 bg-green-500 h-2 rounded-full"
               style={{ width: `${percentComplete}%` }}
             ></div>
             <div className="w-full flex justify-end text-[12px]">
