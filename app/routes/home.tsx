@@ -168,6 +168,11 @@ export default function Home(props: Route.ComponentProps) {
               className="dark:bg-sky-500 bg-green-500 h-2 rounded-full"
               style={{ width: `${percentComplete}%` }}
             ></div>
+            <div className="w-full flex justify-end text-[12px]">
+              <p className="dark:text-slate-600 text-slate-500">
+                {completedTasks} of {totalTasks} completed
+              </p>
+            </div>
           </div>
         </div>
 
