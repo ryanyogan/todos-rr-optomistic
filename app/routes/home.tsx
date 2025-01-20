@@ -1,4 +1,5 @@
-import { ListCheck } from "lucide-react";
+import { motion } from "framer-motion";
+import { ListCheck, Moon, Plus, Sun } from "lucide-react";
 import { useEffect, useRef } from "react";
 import {
   data,
@@ -8,9 +9,6 @@ import {
   useSearchParams,
 } from "react-router";
 import invariant from "tiny-invariant";
-import { ProfileMenu } from "~/components/profile-menu";
-import { StateSelector } from "~/components/state-selector";
-import { ThemeSwitcher } from "~/components/theme-switcher";
 import { TodoActions } from "~/components/todo-actions";
 import { TodoList } from "~/components/todo-list";
 import { getUser } from "~/lib/auth.server";
@@ -147,71 +145,107 @@ export default function Home(props: Route.ComponentProps) {
     totalTasks > 0 ? (completedTasks / totalTasks) * 100 : 0;
 
   return (
-    <div className="flex flex-1 flex-col md:mx-auto md:w-[720px]">
-      <header className="mb-12 flex items-center justify-between px-2">
-        <Link to="/">
-          <h1 className="font-serif tracking-wide font-light text-5xl dark:text-zinc-100">
-            Things
-          </h1>
-        </Link>
-        <div className="flex justify-between gap-x-4">
-          <ThemeSwitcher />
-          <ProfileMenu />
-        </div>
-      </header>
-
-      <main className="flex-1 space-y-4">
-        <div className="px-2 py-2 flex items-center gap-x-4">
-          <StateSelector />
-          <div className="w-full bg-slate-200 dark:bg-slate-700 rounded-full h-2">
-            <div
-              className="dark:bg-blue-500 bg-green-500 h-2 rounded-full"
-              style={{ width: `${percentComplete}%` }}
-            ></div>
-            <div className="w-full flex justify-end text-[12px]">
-              <p className="dark:text-slate-600 text-slate-500">
-                {completedTasks} of {totalTasks} completed
-              </p>
-            </div>
-          </div>
-        </div>
-
-        <fetcher.Form ref={addFormRef} method="post" className="">
-          <fieldset
-            disabled={isAdding}
-            className="flex items-center gap-2 p-2 text-sm disabled:pointer-events-none"
-          >
-            <input type="hidden" name="intent" value={INTENTS.createTask} />
-            <input
-              ref={addInputRef}
-              type="text"
-              name="description"
-              placeholder="Create a new todo..."
-              required
-              className="w-full rounded-md p-3 bg-white dark:bg-slate-700 border border-slate-200 dark:border-slate-600 text-gray-800 dark:text-slate-200 placeholder:text-slate-500 placeholder:dark:text-slate-400 text-[16px] font-light focus:outline-none transition-colors"
-            />
-          </fieldset>
-        </fetcher.Form>
-
-        <div className="px-2 py-2">
-          {data.tasks.length > 0 ? (
-            <ul>
-              <TodoList todos={data.tasks} view={view as View} />
-            </ul>
+    <div>
+      {/* Header */}
+      <div className="flex items-center justify-between mb-8">
+        <h1 className="text-4xl sm:text-5xl font-serif text-slate-800 dark:text-white">
+          Things
+        </h1>
+        <button className="p-2 rounded-full hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors">
+          {true ? (
+            <Sun className="w-5 h-5 text-white" />
           ) : (
-            <div className="flex flex-col">
-              <ListCheck className="mx-auto w-16 h-16 text-slate-500 dark:text-slate-500" />
-              <p className="text-center font-serif text-lg font-light text-slate-500">
-                No tasks available
-              </p>
-            </div>
+            <Moon className="w-5 h-5" />
           )}
-        </div>
+        </button>
+      </div>
+      <motion.div
+        className="h-1 mb-6 rounded-full bg-slate-200 dark:bg-slate-700 overflow-hidden"
+        initial={{ opacity: 0, y: -10 }}
+        animate={{ opacity: 1, y: 0 }}
+      >
+        <motion.div
+          className="h-full bg-teal-400 dark:bg-teal-500"
+          initial={{ width: 0 }}
+          animate={{ width: `${percentComplete}%` }}
+          transition={{ duration: 0.5 }}
+        />
+      </motion.div>
 
-        <div className="px-2 py-2">
-          <TodoActions tasks={data.tasks} />
+      {/* Filters */}
+      <div className="flex items-center justify-between mb-6">
+        <div className="flex gap-2">
+          {(["all", "active", "completed"] as const).map((f) => (
+            <button
+              key={f}
+              className={`px-3 py-1 rounded-full text-sm capitalize transition-colors ${
+                view === "all"
+                  ? "bg-slate-800 text-white dark:bg-white dark:text-slate-800"
+                  : "text-slate-600 dark:text-slate-400 hover:bg-slate-200 dark:hover:bg-slate-700"
+              }`}
+            >
+              {f}
+            </button>
+          ))}
         </div>
-      </main>
+        <div className="flex gap-2 text-sm">
+          <button className="text-slate-600 dark:text-slate-400 hover:text-rose-500 dark:hover:text-rose-400 transition-colors">
+            Clear completed
+          </button>
+          <button className="text-slate-600 dark:text-slate-400 hover:text-rose-500 dark:hover:text-rose-400 transition-colors">
+            Delete all
+          </button>
+        </div>
+      </div>
+
+      {/* <fetcher.Form ref={addFormRef} method="post" className="">
+        <fieldset
+          disabled={isAdding}
+          className="flex items-center gap-2 p-2 text-sm disabled:pointer-events-none"
+        >
+          <input type="hidden" name="intent" value={INTENTS.createTask} />
+          <input
+            ref={addInputRef}
+            type="text"
+            name="description"
+            placeholder="Create a new todo..."
+            required
+            className="w-full rounded-md p-3 bg-white dark:bg-slate-700 border border-slate-200 dark:border-slate-600 text-gray-800 dark:text-slate-200 placeholder:text-slate-500 placeholder:dark:text-slate-400 text-[16px] font-light focus:outline-none transition-colors"
+          />
+        </fieldset>
+      </fetcher.Form> */}
+      <form className="relative mb-6">
+        <input
+          type="text"
+          placeholder="Add a new task..."
+          className="w-full px-4 py-3 rounded-lg bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 focus:outline-none focus:ring-2 focus:ring-teal-400 dark:focus:ring-teal-500 dark:text-white"
+        />
+        <button
+          type="submit"
+          className="absolute right-2 top-1/2 -translate-y-1/2 p-2 rounded-full hover:bg-slate-100 dark:hover:bg-slate-700 transition-colors"
+        >
+          <Plus className="w-5 h-5 text-teal-500" />
+        </button>
+      </form>
+
+      <div className="px-2 py-2">
+        {data.tasks.length > 0 ? (
+          <ul>
+            <TodoList todos={data.tasks} view={view as View} />
+          </ul>
+        ) : (
+          <div className="flex flex-col">
+            <ListCheck className="mx-auto w-16 h-16 text-slate-500 dark:text-slate-500" />
+            <p className="text-center font-serif text-lg font-light text-slate-500">
+              No tasks available
+            </p>
+          </div>
+        )}
+      </div>
+
+      <div className="px-2 py-2">
+        <TodoActions tasks={data.tasks} />
+      </div>
 
       <footer className="mt-12">
         <p className="text-center text-sm leading-loose dark:text-slate-500">
