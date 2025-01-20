@@ -15,9 +15,15 @@ import { TodoActions } from "~/components/todo-actions";
 import { TodoList } from "~/components/todo-list";
 import { getUser } from "~/lib/auth.server";
 import { destroySession, getSession } from "~/lib/session.server";
-import { executeHandler } from "~/lib/tasks";
 import { INTENTS, type View } from "~/types";
 import type { Route } from "./+types/home";
+import {
+  clearCompleted,
+  createTask,
+  deleteAll,
+  deleteTask,
+  updateTask,
+} from "./queries/tasks";
 
 export function meta({}: Route.MetaArgs) {
   return [
@@ -50,11 +56,67 @@ export async function loader(props: Route.LoaderArgs) {
 }
 
 export async function action(props: Route.ActionArgs) {
+  const session = await getSession(props.request.headers.get("Cookie"));
   const formData = await props.request.formData();
+  const userId = session.get("id") as string;
+  invariant(userId, "User ID is required");
+
   const intent = formData.get("intent") as string;
   invariant(intent, "Intent is required");
 
-  await executeHandler(intent, formData);
+  switch (intent) {
+    case INTENTS.createTask: {
+      const description = formData.get("description") as string;
+      invariant(description, "Description is required");
+      await createTask(userId, description);
+      break;
+    }
+
+    case INTENTS.toggleCompletion: {
+      const id = formData.get("id") as string;
+      const completed = formData.get("completed") as string;
+      await updateTask(userId, id, {
+        completed: !JSON.parse(completed),
+        completedAt: !JSON.parse(completed)
+          ? new Date().toISOString()
+          : undefined,
+      });
+      break;
+    }
+
+    case INTENTS.editTask: {
+      const id = formData.get("id") as string;
+      await updateTask(userId, id, { editing: true });
+      break;
+    }
+
+    case INTENTS.saveTask: {
+      const id = formData.get("id") as string;
+      const description = formData.get("description") as string;
+      await updateTask(userId, id, { description, editing: false });
+      break;
+    }
+
+    case INTENTS.deleteTask: {
+      const id = formData.get("id") as string;
+      await deleteTask(userId, id);
+      break;
+    }
+
+    case INTENTS.clearCompleted: {
+      await clearCompleted(userId);
+      break;
+    }
+
+    case INTENTS.deleteAll: {
+      await deleteAll(userId);
+      break;
+    }
+
+    default: {
+      throw new Response("Invalid intent", { status: 400 });
+    }
+  }
 
   return data({ ok: true });
 }

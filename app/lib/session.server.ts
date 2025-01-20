@@ -43,7 +43,6 @@ async function createDrizzleSessionStorage(props: { cookie: Cookie }) {
       .where(sql`${sessions.expiresAt} < CURRENT_TIMESTAMP`);
   }
 
-
   // stupid have a diff process do this
   //setInterval(cleanupExpiredSession, 60 * 60 * 1_000);
 
