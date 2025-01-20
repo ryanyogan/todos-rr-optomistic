@@ -1,7 +1,7 @@
 {
   "version": "6",
   "dialect": "sqlite",
-  "id": "af8e93cc-acce-4176-b246-32a21e5c1ef1",
+  "id": "e97afff1-d874-4ba8-a683-3a88c552f0b3",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "tables": {
     "passwords": {
@@ -43,13 +43,6 @@
             "user_id"
           ],
           "isUnique": true
-        },
-        "user_password_id_idx": {
-          "name": "user_password_id_idx",
-          "columns": [
-            "user_id"
-          ],
-          "isUnique": false
         }
       },
       "foreignKeys": {

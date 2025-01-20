@@ -7,7 +7,6 @@ CREATE TABLE `passwords` (
 );
 --> statement-breakpoint
 CREATE UNIQUE INDEX `passwords_user_id_unique` ON `passwords` (`user_id`);--> statement-breakpoint
-CREATE INDEX `user_password_id_idx` ON `passwords` (`user_id`);--> statement-breakpoint
 CREATE TABLE `sessions` (
 	`id` text PRIMARY KEY NOT NULL,
 	`data` text NOT NULL,
