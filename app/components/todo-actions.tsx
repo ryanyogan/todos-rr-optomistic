@@ -63,19 +63,11 @@ export function TodoActions(props: { tasks: Task[] }) {
     ? tasks.filter((task) => !deletingTodoIds.includes(task.id))
     : tasks;
 
-  const remainingTaskCount = tasks.reduce((acc, task) => {
-    if (!task.completed) {
-      return acc + 1;
-    }
-
-    return acc;
-  }, 0);
-
   return (
-    <div className="flex flex-col items-center justify-between gap-4 text-sm">
+    <div className="flex gap-2 text-sm">
       <fetcher.Form
         method="post"
-        className="flex items-center gap-4"
+        className="flex gap-x-2 text-sm"
         onSubmit={(event) => {
           const submitter = (event.nativeEvent as SubmitEvent)
             .submitter as HTMLButtonElement;
@@ -101,7 +93,7 @@ export function TodoActions(props: { tasks: Task[] }) {
           }
           name="intent"
           value={INTENTS.clearCompleted}
-          className="text-zinc-500 dark:text-sky-400 underline underline-offset-2 text-xs transition disabled:pointer-events-none disabled:opacity-25"
+          className="text-slate-600 dark:text-slate-400 hover:text-rose-500 dark:hover:text-rose-400 transition-colors"
         >
           {isClearingCompleted ? "Clearing..." : "Clear Completed"}
         </button>
@@ -109,7 +101,7 @@ export function TodoActions(props: { tasks: Task[] }) {
           disabled={tasks.length === 0 || isDeletingAll}
           name="intent"
           value={INTENTS.deleteAll}
-          className="text-zinc-500 dark:text-sky-400 underline underline-offset-2 text-xs transition disabled:pointer-events-none disabled:opacity-25"
+          className="text-slate-600 dark:text-slate-400 hover:text-rose-500 dark:hover:text-rose-400 transition-colors"
         >
           {isDeletingAll ? "Deleting..." : "Delete All"}
         </button>
