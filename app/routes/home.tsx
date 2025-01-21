@@ -160,6 +160,26 @@ export default function Home(props: Route.ComponentProps) {
         </div>
       </div>
 
+      <fetcher.Form ref={addFormRef} method="post" className="relative mb-6">
+        <input type="hidden" name="intent" value={INTENTS.createTask} />
+        <input
+          ref={addInputRef}
+          type="text"
+          name="description"
+          disabled={isAdding}
+          required
+          placeholder="Add a new task..."
+          className="w-full px-4 py-3 rounded-lg bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 focus:outline-none focus:ring-2 focus:ring-teal-400 dark:focus:ring-teal-500 dark:text-white"
+        />
+        <button
+          disabled={isAdding}
+          type="submit"
+          className="absolute right-2 top-1/2 -translate-y-1/2 p-2 rounded-full hover:bg-slate-100 dark:hover:bg-slate-700 transition-colors"
+        >
+          <Plus className="w-5 h-5 text-teal-500" />
+        </button>
+      </fetcher.Form>
+
       <motion.div
         className="h-1 mb-6 rounded-full bg-slate-200 dark:bg-slate-700 overflow-hidden"
         initial={{ opacity: 0, y: -10 }}
@@ -191,33 +211,8 @@ export default function Home(props: Route.ComponentProps) {
             </button>
           ))}
         </Form>
-
         <TodoActions tasks={data.tasks} />
       </div>
-
-      <fetcher.Form
-        ref={addFormRef}
-        method="post"
-        className="relative mb-6 py-4"
-      >
-        <input type="hidden" name="intent" value={INTENTS.createTask} />
-        <input
-          ref={addInputRef}
-          type="text"
-          name="description"
-          disabled={isAdding}
-          required
-          placeholder="Add a new task..."
-          className="w-full px-4 py-3 rounded-lg bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 focus:outline-none focus:ring-2 focus:ring-teal-400 dark:focus:ring-teal-500 dark:text-white"
-        />
-        <button
-          disabled={isAdding}
-          type="submit"
-          className="absolute right-2 top-1/2 -translate-y-1/2 p-2 rounded-full hover:bg-slate-100 dark:hover:bg-slate-700 transition-colors"
-        >
-          <Plus className="w-5 h-5 text-teal-500" />
-        </button>
-      </fetcher.Form>
 
       <TodoList todos={data.tasks} view={view as View} />
     </div>

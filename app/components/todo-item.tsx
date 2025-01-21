@@ -52,7 +52,7 @@ export function TodoItem(props: { todo: Task }) {
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, x: -20 }}
-      className="group flex items-start gap-4 p-4 mb-3 bg-white dark:bg-slate-800 rounded-lg shadow-sm hover:shadow-md transition-shadow"
+      className="group flex items-start gap-4 p-4 mb-3 bg-white/50 dark:bg-slate-500/10 hover:bg-white/70 rounded-lg shadow-sm dark:hover:bg-slate-500/20 transition-shadow"
     >
       <fetcher.Form method="post">
         <input type="hidden" name="id" value={props.todo.id} />
