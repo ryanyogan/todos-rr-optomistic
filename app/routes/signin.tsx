@@ -50,7 +50,7 @@ export default function SignIn(props: Route.ComponentProps) {
   return (
     <div className="h-[calc(100dvh-100px)] w-full flex flex-col items-center justify-center">
       <div className="w-full max-w-md">
-        <h1 className="text-4xl font-extralight text-center mb-12 text-slate-800 dark:text-slate-200">
+        <h1 className="text-4xl font-serif text-center mb-12 text-slate-800 dark:text-slate-200">
           Sign In
         </h1>
 
@@ -65,7 +65,7 @@ export default function SignIn(props: Route.ComponentProps) {
                 type="email"
                 required
                 placeholder="Enter your email..."
-                className="w-full rounded-md p-3 bg-white dark:bg-slate-700 border border-slate-200 dark:border-slate-600 text-gray-800 dark:text-slate-200 placeholder:text-slate-500 placeholder:dark:text-slate-400 text-[16px] font-light focus:outline-none transition-colors"
+                className="w-full px-4 py-3 rounded-lg bg-white/30 dark:bg-slate-800 border border-rose-200 dark:border-slate-700 focus:outline-none focus:ring-2 focus:ring-teal-400 dark:focus:ring-teal-500 dark:text-white"
               />
               {errors?.email && (
                 <p className="flex items-center text-sm font-medium leading-5 text-red-500">
@@ -84,7 +84,7 @@ export default function SignIn(props: Route.ComponentProps) {
                 required
                 autoComplete="new-password"
                 placeholder="Enter your password..."
-                className="w-full rounded-md p-3 bg-white dark:bg-slate-700 border border-slate-200 dark:border-slate-600 text-gray-800 dark:text-slate-200 placeholder:text-slate-500 placeholder:dark:text-slate-400 text-[16px] font-light focus:outline-none transition-colors"
+                className="w-full px-4 py-3 rounded-lg bg-white/30 dark:bg-slate-800 border border-rose-200 dark:border-slate-700 focus:outline-none focus:ring-2 focus:ring-teal-400 dark:focus:ring-teal-500 dark:text-white"
               />
               {errors?.password && (
                 <p className="flex items-center text-sm font-medium leading-5 text-red-500">
@@ -95,10 +95,10 @@ export default function SignIn(props: Route.ComponentProps) {
           </fieldset>
 
           <div className="flex justify-between items-center pt-4">
-            <span className="text-xs text-gray-400">
+            <span className="text-xs text-slate-500">
               <Link
                 to="/signup"
-                className="hover:text-gray-600 transition-colors"
+                className="hover:text-slate-800 transition-colors"
               >
                 Do not have an account?
               </Link>
@@ -106,7 +106,7 @@ export default function SignIn(props: Route.ComponentProps) {
 
             <button
               type="submit"
-              className="px-6 py-2 bg-gray-50 dark:bg-slate-700 text-gray-600 dark:text-slate-200 rounded-md text-sm font-light hover:bg-gray-100 hover:dark:bg-gray-600 transition-colors focus:outline-none"
+              className="px-6 py-2 text-gray-600 dark:text-slate-200 rounded-md border border-rose-200 text-sm font-sans hover:bg-gray-100 hover:dark:bg-gray-600 transition-colors focus:outline-none"
             >
               {isSubmitting ? (
                 <>

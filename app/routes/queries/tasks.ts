@@ -2,7 +2,11 @@ import { and, eq } from "drizzle-orm";
 import { tasks, users, type Task } from "~/drizzle/schema";
 import { db } from "~/lib/db.server";
 
-export async function createTask(userId: string, description: string) {
+export async function createTask(
+  id: string,
+  userId: string,
+  description: string
+) {
   try {
     const user = await db
       .select()
@@ -18,6 +22,7 @@ export async function createTask(userId: string, description: string) {
     const [newTask] = await db
       .insert(tasks)
       .values({
+        id,
         userId: user[0].id,
         description,
         completed: false,

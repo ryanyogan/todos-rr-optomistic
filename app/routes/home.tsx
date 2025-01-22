@@ -1,18 +1,20 @@
 import { motion } from "framer-motion";
 import { Plus } from "lucide-react";
-import { useEffect, useRef } from "react";
+import { useRef } from "react";
 import {
   data,
   Form,
   redirect,
-  useFetcher,
+  useFetchers,
   useSearchParams,
+  useSubmit,
 } from "react-router";
 import invariant from "tiny-invariant";
 import { ProfileMenu } from "~/components/profile-menu";
 import { ThemeSwitcher } from "~/components/theme-switcher";
 import { TodoActions } from "~/components/todo-actions";
 import { TodoList } from "~/components/todo-list";
+import type { Task } from "~/drizzle/schema";
 import { getUser } from "~/lib/auth.server";
 import { destroySession, getSession } from "~/lib/session.server";
 import { INTENTS, type View } from "~/types";
@@ -67,8 +69,9 @@ export async function action(props: Route.ActionArgs) {
   switch (intent) {
     case INTENTS.createTask: {
       const description = formData.get("description") as string;
+      const id = formData.get("id") as string;
       invariant(description, "Description is required");
-      await createTask(userId, description);
+      await createTask(id, userId, description);
       break;
     }
 
@@ -123,26 +126,48 @@ export async function action(props: Route.ActionArgs) {
 
 export default function Home(props: Route.ComponentProps) {
   const data = props.loaderData;
-  const fetcher = useFetcher();
+  const submit = useSubmit();
   const [searchParams] = useSearchParams();
   const view = searchParams.get("view") || "all";
 
   const addFormRef = useRef<HTMLFormElement>(null);
   const addInputRef = useRef<HTMLInputElement>(null);
 
-  const isAdding =
-    fetcher.state === "submitting" &&
-    fetcher.formData?.get("intent") === INTENTS.createTask;
+  const pendingTasks = usePendingTasks();
+  const pendingCompletions = usePendingTaskCompletion();
 
-  useEffect(() => {
-    if (!isAdding) {
-      addFormRef.current?.reset();
-      addInputRef.current?.focus();
+  let tasks = new Map<string, Task>(data.tasks.map((task) => [task.id, task]));
+
+  for (let pendingTask of pendingTasks) {
+    if (!tasks.has(pendingTask.id)) {
+      tasks.set(pendingTask.id, {
+        ...pendingTask,
+        userId: "",
+        completed: false,
+        createdAt: new Date().toISOString(),
+        completedAt: null,
+        editing: false,
+      });
     }
-  }, [isAdding]);
+  }
 
-  const completedTasks = data.tasks.filter((task) => task.completed).length;
-  const totalTasks = data.tasks.length;
+  for (let pendingCompletion of pendingCompletions) {
+    let task = tasks.get(pendingCompletion.id);
+    if (task) {
+      tasks.set(pendingCompletion.id, {
+        ...task,
+        completed: pendingCompletion.completed,
+        completedAt: pendingCompletion.completedAt
+          ? pendingCompletion.completedAt
+          : "",
+      });
+    }
+  }
+
+  const completedTasks = [...tasks.values()].filter(
+    (task) => task.completed
+  ).length;
+  const totalTasks = [...tasks.values()].length;
   const percentComplete =
     totalTasks > 0 ? (completedTasks / totalTasks) * 100 : 0;
 
@@ -150,7 +175,7 @@ export default function Home(props: Route.ComponentProps) {
     <div>
       {/* Header */}
       <div className="flex items-center justify-between mb-8">
-        <h1 className="text-4xl sm:text-5xl font-serif text-slate-800 dark:text-white">
+        <h1 className="text-5xl font-serif text-slate-800 dark:text-white">
           Things
         </h1>
 
@@ -160,38 +185,14 @@ export default function Home(props: Route.ComponentProps) {
         </div>
       </div>
 
-      <fetcher.Form ref={addFormRef} method="post" className="relative mb-6">
-        <input type="hidden" name="intent" value={INTENTS.createTask} />
-        <input
-          ref={addInputRef}
-          type="text"
-          name="description"
-          disabled={isAdding}
-          required
-          placeholder="Add a new task..."
-          className="w-full px-4 py-3 rounded-lg bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 focus:outline-none focus:ring-2 focus:ring-teal-400 dark:focus:ring-teal-500 dark:text-white"
-        />
-        <button
-          disabled={isAdding}
-          type="submit"
-          className="absolute right-2 top-1/2 -translate-y-1/2 p-2 rounded-full hover:bg-slate-100 dark:hover:bg-slate-700 transition-colors"
-        >
-          <Plus className="w-5 h-5 text-teal-500" />
-        </button>
-      </fetcher.Form>
-
-      <motion.div
-        className="h-1 mb-6 rounded-full bg-slate-200 dark:bg-slate-700 overflow-hidden"
-        initial={{ opacity: 0, y: -10 }}
-        animate={{ opacity: 1, y: 0 }}
-      >
+      <div className="h-1 mb-6 rounded-full bg-slate-200 dark:bg-slate-700 overflow-hidden">
         <motion.div
           className="h-full bg-teal-400 dark:bg-teal-500"
           initial={{ width: 0 }}
           animate={{ width: `${percentComplete}%` }}
           transition={{ duration: 0.5 }}
         />
-      </motion.div>
+      </div>
 
       {/* Filters */}
       <div className="flex items-center justify-between mb-6">
@@ -214,7 +215,97 @@ export default function Home(props: Route.ComponentProps) {
         <TodoActions tasks={data.tasks} />
       </div>
 
-      <TodoList todos={data.tasks} view={view as View} />
+      <Form
+        ref={addFormRef}
+        method="post"
+        className="relative mb-6"
+        onSubmit={(event) => {
+          event.preventDefault();
+
+          let formData = new FormData(event.currentTarget);
+          let id = crypto.randomUUID();
+          formData.set("id", id);
+
+          submit(formData, {
+            method: "post",
+            navigate: false,
+            flushSync: true,
+          });
+
+          invariant(addInputRef.current);
+          addInputRef.current.value = "";
+        }}
+      >
+        <input type="hidden" name="intent" value={INTENTS.createTask} />
+        <input
+          ref={addInputRef}
+          type="text"
+          name="description"
+          required
+          placeholder="Add a new task..."
+          className="w-full px-4 py-3 font-serif rounded-lg bg-white/30 dark:bg-slate-800 border border-rose-200 dark:border-slate-700 focus:outline-none focus:ring-2 focus:ring-teal-400 dark:focus:ring-teal-500 dark:text-white"
+        />
+        <button
+          type="submit"
+          className="absolute right-2 top-1/2 -translate-y-1/2 p-2 rounded-full hover:bg-slate-100 dark:hover:bg-slate-700 transition-colors"
+        >
+          <Plus className="w-5 h-5 text-teal-500" />
+        </button>
+      </Form>
+
+      <div className="overflow-y-auto max-h-[calc(100vh-20rem)]">
+        <TodoList todos={[...tasks.values()]} view={view as View} />
+      </div>
     </div>
   );
+}
+
+function usePendingTaskCompletion() {
+  type PendingTask = ReturnType<typeof useFetchers>[number] & {
+    formData: FormData;
+  };
+
+  return useFetchers()
+    .filter((fetcher): fetcher is PendingTask => {
+      if (!fetcher.formData) return false;
+      let intent = fetcher.formData.get("intent");
+
+      return intent === INTENTS.toggleCompletion;
+    })
+    .map((fetcher) => {
+      let id = String(fetcher.formData.get("id"));
+      let completed = String(fetcher.formData.get("completed"));
+
+      return {
+        id,
+        completed: !JSON.parse(completed),
+        completedAt: !JSON.parse(completed)
+          ? new Date().toISOString()
+          : undefined,
+      };
+    });
+}
+
+function usePendingTasks() {
+  type PendingTask = ReturnType<typeof useFetchers>[number] & {
+    formData: FormData;
+  };
+
+  return useFetchers()
+    .filter((fetcher): fetcher is PendingTask => {
+      if (!fetcher.formData) return false;
+      let intent = fetcher.formData.get("intent");
+
+      return intent === INTENTS.createTask;
+    })
+    .map((fetcher) => {
+      let description = String(fetcher.formData.get("description"));
+      let id = String(fetcher.formData.get("id"));
+
+      return {
+        id,
+        description,
+        createdAt: new Date().toISOString(),
+      };
+    });
 }

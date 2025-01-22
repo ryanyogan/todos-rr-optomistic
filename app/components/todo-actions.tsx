@@ -93,7 +93,7 @@ export function TodoActions(props: { tasks: Task[] }) {
           }
           name="intent"
           value={INTENTS.clearCompleted}
-          className="text-slate-600 dark:text-slate-400 hover:text-rose-500 dark:hover:text-rose-400 transition-colors"
+          className="text-slate-600 text-xs dark:text-slate-400 hover:text-rose-500 dark:hover:text-rose-400 transition-colors"
         >
           {isClearingCompleted ? "Clearing..." : "Clear Completed"}
         </button>
@@ -101,7 +101,7 @@ export function TodoActions(props: { tasks: Task[] }) {
           disabled={tasks.length === 0 || isDeletingAll}
           name="intent"
           value={INTENTS.deleteAll}
-          className="text-slate-600 dark:text-slate-400 hover:text-rose-500 dark:hover:text-rose-400 transition-colors"
+          className="text-slate-600 text-xs dark:text-slate-400 hover:text-rose-500 dark:hover:text-rose-400 transition-colors"
         >
           {isDeletingAll ? "Deleting..." : "Delete All"}
         </button>

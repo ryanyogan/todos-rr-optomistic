@@ -61,7 +61,7 @@ export function TodoList(props: { todos: Task[]; view: View }) {
   }
 
   return (
-    <>
+    <div>
       <AnimatePresence>
         {visibleTodos.map((todo) => (
           <TodoItem key={todo.id} todo={todo} />
@@ -83,6 +83,6 @@ export function TodoList(props: { todos: Task[]; view: View }) {
           {completedTaskCount} of {visibleTodos.length} tasks completed
         </p>
       </footer>
-    </>
+    </div>
   );
 }
