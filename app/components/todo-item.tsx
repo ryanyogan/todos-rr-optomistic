@@ -49,7 +49,7 @@ export function TodoItem(props: { todo: Task }) {
   return (
     <motion.div
       key={props.todo.id}
-      initial={{ opacity: 0, y: -20 }}
+      initial={{ opacity: 0, y: -10 }}
       animate={{ opacity: 1, y: 0 }}
       className="group flex items-start gap-4 p-4 mb-3 bg-white/30 dark:bg-slate-500/10 hover:bg-white/70 rounded-lg shadow-sm dark:hover:bg-slate-500/20 transition-shadow"
     >

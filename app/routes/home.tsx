@@ -1,8 +1,7 @@
 import { motion } from "framer-motion";
 import { Plus } from "lucide-react";
-import { useRef } from "react";
+import { useMemo, useRef } from "react";
 import {
-  data,
   Form,
   redirect,
   useFetchers,
@@ -49,12 +48,12 @@ export async function loader(props: Route.LoaderArgs) {
     throw redirect("/signin");
   }
 
-  return data({
+  return {
     id: userQuery.data.user.id.toString(),
     name: userQuery.data.user.name,
     email: userQuery.data.user.email,
     tasks: userQuery.data.user.tasks,
-  });
+  };
 }
 
 export async function action(props: Route.ActionArgs) {
@@ -121,7 +120,7 @@ export async function action(props: Route.ActionArgs) {
     }
   }
 
-  return data({ ok: true });
+  return { ok: true };
 }
 
 export default function Home(props: Route.ComponentProps) {
@@ -129,7 +128,7 @@ export default function Home(props: Route.ComponentProps) {
   const submit = useSubmit();
   const listRef = useRef<HTMLDivElement>(null);
   const [searchParams] = useSearchParams();
-  const view = searchParams.get("view") || "all";
+  const view = (searchParams.get("view") || "all") as View;
 
   const addFormRef = useRef<HTMLFormElement>(null);
   const addInputRef = useRef<HTMLInputElement>(null);
@@ -142,38 +141,42 @@ export default function Home(props: Route.ComponentProps) {
     listRef.current.scrollTop = listRef.current.scrollHeight;
   }
 
-  let tasks = new Map<string, Task>(data.tasks.map((task) => [task.id, task]));
+  const tasks = useMemo(() => {
+    const taskMap = new Map<string, Task>(
+      data.tasks.map((task: Task) => [task.id, task])
+    );
 
-  for (let pendingTask of pendingTasks) {
-    if (!tasks.has(pendingTask.id)) {
-      tasks.set(pendingTask.id, {
-        ...pendingTask,
-        userId: "",
-        completed: false,
-        createdAt: new Date().toISOString(),
-        completedAt: null,
-        editing: false,
-      });
-    }
-  }
+    pendingTasks.forEach((pendingTask) => {
+      if (!taskMap.has(pendingTask.id)) {
+        taskMap.set(pendingTask.id, {
+          ...pendingTask,
+          userId: "",
+          completed: false,
+          createdAt: new Date().toISOString(),
+          completedAt: null,
+          editing: false,
+        });
+      }
+    });
 
-  for (let pendingCompletion of pendingCompletions) {
-    let task = tasks.get(pendingCompletion.id);
-    if (task) {
-      tasks.set(pendingCompletion.id, {
-        ...task,
-        completed: pendingCompletion.completed,
-        completedAt: pendingCompletion.completedAt
-          ? pendingCompletion.completedAt
-          : "",
-      });
-    }
-  }
+    pendingCompletions.forEach((pendingCompletion) => {
+      const task = taskMap.get(pendingCompletion.id);
+      if (task) {
+        taskMap.set(pendingCompletion.id, {
+          ...task,
+          completed: pendingCompletion.completed,
+          completedAt: pendingCompletion.completedAt || "",
+        });
+      }
+    });
+
+    return taskMap;
+  }, [data.tasks, pendingTasks, pendingCompletions]);
 
   const completedTasks = [...tasks.values()].filter(
     (task) => task.completed
   ).length;
-  const totalTasks = [...tasks.values()].length;
+  const totalTasks = tasks.size;
   const percentComplete =
     totalTasks > 0 ? (completedTasks / totalTasks) * 100 : 0;
 
@@ -184,7 +187,6 @@ export default function Home(props: Route.ComponentProps) {
         <h1 className="text-5xl font-serif text-slate-800 dark:text-white">
           Things
         </h1>
-
         <div className="flex space-x-4 items-center">
           <ThemeSwitcher />
           <ProfileMenu />
@@ -228,8 +230,8 @@ export default function Home(props: Route.ComponentProps) {
         onSubmit={(event) => {
           event.preventDefault();
 
-          let formData = new FormData(event.currentTarget);
-          let id = crypto.randomUUID();
+          const formData = new FormData(event.currentTarget);
+          const id = crypto.randomUUID();
           formData.set("id", id);
 
           submit(formData, {
@@ -261,7 +263,7 @@ export default function Home(props: Route.ComponentProps) {
       </Form>
 
       <div ref={listRef} className="overflow-y-auto max-h-[calc(100vh-20rem)]">
-        <TodoList todos={[...tasks.values()]} view={view as View} />
+        <TodoList todos={[...tasks.values()]} view={view} />
       </div>
     </div>
   );
@@ -275,14 +277,12 @@ function usePendingTaskCompletion() {
   return useFetchers()
     .filter((fetcher): fetcher is PendingTask => {
       if (!fetcher.formData) return false;
-      let intent = fetcher.formData.get("intent");
-
+      const intent = fetcher.formData.get("intent");
       return intent === INTENTS.toggleCompletion;
     })
     .map((fetcher) => {
-      let id = String(fetcher.formData.get("id"));
-      let completed = String(fetcher.formData.get("completed"));
-
+      const id = String(fetcher.formData.get("id"));
+      const completed = String(fetcher.formData.get("completed"));
       return {
         id,
         completed: !JSON.parse(completed),
@@ -301,14 +301,12 @@ function usePendingTasks() {
   return useFetchers()
     .filter((fetcher): fetcher is PendingTask => {
       if (!fetcher.formData) return false;
-      let intent = fetcher.formData.get("intent");
-
+      const intent = fetcher.formData.get("intent");
       return intent === INTENTS.createTask;
     })
     .map((fetcher) => {
-      let description = String(fetcher.formData.get("description"));
-      let id = String(fetcher.formData.get("id"));
-
+      const description = String(fetcher.formData.get("description"));
+      const id = String(fetcher.formData.get("id"));
       return {
         id,
         description,
