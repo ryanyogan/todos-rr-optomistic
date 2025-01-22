@@ -127,6 +127,7 @@ export async function action(props: Route.ActionArgs) {
 export default function Home(props: Route.ComponentProps) {
   const data = props.loaderData;
   const submit = useSubmit();
+  const listRef = useRef<HTMLDivElement>(null);
   const [searchParams] = useSearchParams();
   const view = searchParams.get("view") || "all";
 
@@ -135,6 +136,11 @@ export default function Home(props: Route.ComponentProps) {
 
   const pendingTasks = usePendingTasks();
   const pendingCompletions = usePendingTaskCompletion();
+
+  function scrollList() {
+    invariant(listRef.current);
+    listRef.current.scrollTop = listRef.current.scrollHeight;
+  }
 
   let tasks = new Map<string, Task>(data.tasks.map((task) => [task.id, task]));
 
@@ -234,6 +240,7 @@ export default function Home(props: Route.ComponentProps) {
 
           invariant(addInputRef.current);
           addInputRef.current.value = "";
+          scrollList();
         }}
       >
         <input type="hidden" name="intent" value={INTENTS.createTask} />
@@ -253,7 +260,7 @@ export default function Home(props: Route.ComponentProps) {
         </button>
       </Form>
 
-      <div className="overflow-y-auto max-h-[calc(100vh-20rem)]">
+      <div ref={listRef} className="overflow-y-auto max-h-[calc(100vh-20rem)]">
         <TodoList todos={[...tasks.values()]} view={view as View} />
       </div>
     </div>
