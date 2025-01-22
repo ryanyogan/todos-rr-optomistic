@@ -50,7 +50,7 @@ export function TodoList(props: { todos: Task[]; view: View }) {
 
   if (visibleTodos.length === 0) {
     return (
-      <p className="text-center leading-7">
+      <p className="text-center text-slate-700 text-sm font-serif dark:text-slate-400">
         {props.view === "all"
           ? "No tasks available"
           : props.view === "active"
