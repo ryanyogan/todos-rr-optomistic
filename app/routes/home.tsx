@@ -193,7 +193,7 @@ export default function Home(props: Route.ComponentProps) {
         </div>
       </div>
 
-      <div className="h-1 mb-6 rounded-full bg-slate-200 dark:bg-slate-700 overflow-hidden">
+      <div className="h-2 mb-6 bg-slate-200 dark:bg-slate-700 overflow-hidden">
         <motion.div
           className="h-full bg-teal-400 dark:bg-teal-500"
           initial={{ width: 0 }}
@@ -210,7 +210,7 @@ export default function Home(props: Route.ComponentProps) {
               key={option}
               name="view"
               value={option}
-              className={`px-3 py-1 rounded-full text-sm capitalize transition-colors ${
+              className={`px-3 py-1 text-sm capitalize transition-colors ${
                 view === option
                   ? "bg-slate-800 text-white dark:bg-white dark:text-slate-800"
                   : "text-slate-600 dark:text-slate-400 hover:bg-slate-200 dark:hover:bg-slate-700"
@@ -226,7 +226,7 @@ export default function Home(props: Route.ComponentProps) {
       <Form
         ref={addFormRef}
         method="post"
-        className="relative mb-6"
+        className="relative mb-8"
         onSubmit={(event) => {
           event.preventDefault();
 
@@ -252,7 +252,7 @@ export default function Home(props: Route.ComponentProps) {
           name="description"
           required
           placeholder="Add a new task..."
-          className="w-full px-4 py-3 font-serif rounded-lg bg-white/30 dark:bg-slate-800 border border-rose-200 dark:border-slate-700 focus:outline-none focus:ring-2 focus:ring-teal-400 dark:focus:ring-teal-500 dark:text-white"
+          className="w-full px-4 py-3 text-lg font-serif bg-white/70 dark:bg-slate-800 border border-rose-200/50 dark:border-slate-700 focus:outline-none focus:ring-2 focus:ring-teal-400 dark:focus:ring-teal-500 dark:text-white"
         />
         <button
           type="submit"

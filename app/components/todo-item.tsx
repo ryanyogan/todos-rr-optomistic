@@ -51,7 +51,7 @@ export function TodoItem(props: { todo: Task }) {
       key={props.todo.id}
       initial={{ opacity: 0, y: -10 }}
       animate={{ opacity: 1, y: 0 }}
-      className="group flex items-start gap-4 p-4 mb-3 bg-white/30 dark:bg-slate-500/10 hover:bg-white/70 rounded-lg shadow-sm dark:hover:bg-slate-500/20 transition-shadow"
+      className="group flex items-start gap-4 p-4 mb-3 bg-white/30 dark:bg-slate-500/10 hover:bg-white/70 shadow-sm dark:hover:bg-slate-500/20 transition-shadow"
     >
       <fetcher.Form method="post">
         <input type="hidden" name="id" value={props.todo.id} />
@@ -77,13 +77,13 @@ export function TodoItem(props: { todo: Task }) {
       </fetcher.Form>
       <div className="flex-1 min-w-0">
         <p
-          className={`text-slate-700 dark:text-slate-200 break-words font-serif ${
+          className={`text-slate-800 dark:text-slate-200 break-words font-serif ${
             completed ? "line-through text-slate-400 dark:text-slate-500" : ""
           }`}
         >
           {description}
         </p>
-        <p className="text-xs text-slate-400 dark:text-slate-500 mt-1">
+        <p className="text-xs text-slate-500 dark:text-slate-500 mt-1">
           {completed
             ? `Completed ${format(completedAt, "MMM d, yyyy")}`
             : `Created ${format(props.todo.createdAt, "MMM d, yyyy")}`}

@@ -76,13 +76,6 @@ export function TodoList(props: { todos: Task[]; view: View }) {
           </p>
         </div>
       )}
-
-      {/* Footer */}
-      <footer className="mt-12 text-center text-sm text-slate-400 dark:text-slate-500">
-        <p>
-          {completedTaskCount} of {visibleTodos.length} tasks completed
-        </p>
-      </footer>
     </div>
   );
 }
