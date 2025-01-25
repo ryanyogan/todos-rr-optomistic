@@ -126,7 +126,6 @@ export async function action(props: Route.ActionArgs) {
 export default function Home(props: Route.ComponentProps) {
   const data = props.loaderData;
   const submit = useSubmit();
-  const listRef = useRef<HTMLDivElement>(null);
   const [searchParams] = useSearchParams();
   const view = (searchParams.get("view") || "all") as View;
 
@@ -135,11 +134,6 @@ export default function Home(props: Route.ComponentProps) {
 
   const pendingTasks = usePendingTasks();
   const pendingCompletions = usePendingTaskCompletion();
-
-  function scrollList() {
-    invariant(listRef.current);
-    listRef.current.scrollTop = listRef.current.scrollHeight;
-  }
 
   const tasks = useMemo(() => {
     const taskMap = new Map<string, Task>(
@@ -193,7 +187,7 @@ export default function Home(props: Route.ComponentProps) {
         </div>
       </div>
 
-      <div className="h-2 mb-6 bg-slate-200 dark:bg-slate-700 overflow-hidden">
+      <div className="h-2 mb-6 rounded-md bg-slate-200 dark:bg-slate-700 overflow-hidden">
         <motion.div
           className="h-full bg-teal-400 dark:bg-teal-500"
           initial={{ width: 0 }}
@@ -210,7 +204,7 @@ export default function Home(props: Route.ComponentProps) {
               key={option}
               name="view"
               value={option}
-              className={`px-3 py-1 text-sm capitalize transition-colors ${
+              className={`px-3 rounded-full py-1 text-sm capitalize transition-colors ${
                 view === option
                   ? "bg-slate-800 text-white dark:bg-white dark:text-slate-800"
                   : "text-slate-600 dark:text-slate-400 hover:bg-slate-200 dark:hover:bg-slate-700"
@@ -242,7 +236,6 @@ export default function Home(props: Route.ComponentProps) {
 
           invariant(addInputRef.current);
           addInputRef.current.value = "";
-          scrollList();
         }}
       >
         <input type="hidden" name="intent" value={INTENTS.createTask} />
@@ -252,19 +245,17 @@ export default function Home(props: Route.ComponentProps) {
           name="description"
           required
           placeholder="Add a new task..."
-          className="w-full px-4 py-3 text-lg font-serif bg-white/70 dark:bg-slate-800 border border-rose-200/50 dark:border-slate-700 focus:outline-none focus:ring-2 focus:ring-teal-400 dark:focus:ring-teal-500 dark:text-white"
+          className="w-full px-4 py-3 rounded-md text-lg font-serif bg-white dark:bg-slate-800 border border-rose-200/80 dark:border-slate-700 focus:outline-none focus:ring-2 focus:ring-teal-400 dark:focus:ring-teal-500 dark:text-white"
         />
         <button
           type="submit"
           className="absolute right-2 top-1/2 -translate-y-1/2 p-2 rounded-full hover:bg-slate-100 dark:hover:bg-slate-700 transition-colors"
         >
-          <Plus className="w-5 h-5 text-teal-500" />
+          <Plus className="w-5 h-5 text-slate-600" />
         </button>
       </Form>
 
-      <div ref={listRef} className="overflow-y-auto max-h-[calc(100vh-20rem)]">
-        <TodoList todos={[...tasks.values()]} view={view} />
-      </div>
+      <TodoList todos={[...tasks.values()]} view={view} />
     </div>
   );
 }
